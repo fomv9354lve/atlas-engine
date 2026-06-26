@@ -1,0 +1,101 @@
+/* ============================================================================
+   kreniq-shell.css — FUENTE ÚNICA DE VERDAD del shell KRENIQ (CAPAS · Atlas · landing).
+   Tokens de layout + componentes del chrome (nav, bg-logo flotante, section, card,
+   botones, footer). Cualquier página que linkee esto hereda el shell idéntico ->
+   la inconsistencia (1200 vs 1400, cajas-en-cajas) se vuelve estructuralmente imposible.
+   Valores EXACTOS al home de CAPAS (refactor pixel-idéntico, validado con pixeldiff).
+   ============================================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* paleta */
+  --pink:#e8185d;--pink2:#c4125a;--bg:#050507;--surface:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);--text:rgba(255,255,255,0.88);--muted:rgba(255,255,255,0.44);
+  --accent:#4f5ef7;--green:#48bb78;--amber:#f6ad55;
+  /* TOKENS DE LAYOUT — la fuente única de verdad del ancho/gutter/altura-nav */
+  --col:1200px;        /* ancho de columna canónico (NO 1400) */
+  --gutter:48px;       /* padding horizontal de nav/section/hero */
+  --nav-h:60px;        /* altura de la barra de navegación */
+  --radius:14px;       /* radio canónico de cards/paneles */
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;padding:0 var(--gutter);height:var(--nav-h);border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(8,8,16,0.92);backdrop-filter:blur(12px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:40px;flex-shrink:0}
+.nav-logo img{width:32px;height:32px;object-fit:contain;display:block}
+.nav-logo-title{font-size:14px;font-weight:800;color:#fff;letter-spacing:-0.01em;line-height:1.1}
+.nav-logo-sub{font-size:9px;font-weight:500;color:#444;letter-spacing:0.1em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;padding:7px 14px;border-radius:6px;white-space:nowrap;transition:color .15s}
+.nav-links a:hover{color:rgba(255,255,255,0.85)}
+.nav-links a.active{color:#fff;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05)}
+.nav-sep{flex:1}
+.nav-cta{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font-size:13px;font-weight:700;padding:9px 20px;border-radius:7px;text-decoration:none;box-shadow:0 2px 14px rgba(232,24,93,0.35);white-space:nowrap;transition:opacity .15s}
+.nav-cta:hover{opacity:0.88}
+
+/* ── BACKGROUND (logo canónico flotante) ── */
+.bg-logo{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0.65}
+.bg-logo iframe{width:100%;height:100%;border:0;display:block;background:#000;transform:scale(3.35);transform-origin:center center}
+.bg-veil{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(circle at 60% 35%,transparent 0%,rgba(5,5,7,0.25) 40%,rgba(5,5,7,0.68) 100%),
+             linear-gradient(rgba(5,5,7,0.40),rgba(5,5,7,0.10) 30%,rgba(5,5,7,0.55))}
+
+/* ── LAYOUT ── */
+.page{position:relative;z-index:2}
+
+/* ── HERO ── */
+.hero{min-height:calc(100vh - var(--nav-h));display:flex;align-items:center;padding:80px var(--gutter) 60px}
+.hero-inner{max-width:var(--col);width:100%;margin:0 auto;display:grid;grid-template-columns:1fr 460px;gap:80px;align-items:center}
+.hero-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--pink);margin-bottom:20px}
+.hero-h1{font-size:clamp(36px,4.5vw,58px);font-weight:900;line-height:1.08;letter-spacing:-0.03em;color:#fff;margin-bottom:24px}
+.hero-h1 em{font-style:normal;background:linear-gradient(135deg,var(--pink),#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;line-height:1.65;color:rgba(255,255,255,0.6);margin-bottom:40px;max-width:520px}
+.hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* ── BOTONES ── */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;font-size:14px;font-weight:700;padding:13px 26px;border-radius:8px;text-decoration:none;border:none;cursor:pointer;box-shadow:0 2px 20px rgba(232,24,93,0.4);transition:opacity .15s}
+.btn-primary:hover{opacity:0.88}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:rgba(255,255,255,0.75);font-size:14px;font-weight:500;padding:13px 22px;border-radius:8px;text-decoration:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;transition:border-color .15s,color .15s}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+
+/* ── SECTION ── */
+.section{padding:96px var(--gutter)}
+.section-inner{max-width:var(--col);margin:0 auto}
+.section-label{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--pink);margin-bottom:14px}
+.section-h2{font-size:clamp(28px,3vw,42px);font-weight:900;letter-spacing:-0.03em;color:#fff;margin-bottom:14px;line-height:1.1}
+.section-sub{font-size:16px;color:rgba(255,255,255,0.5);max-width:560px;line-height:1.65;margin-bottom:56px}
+
+/* ── CARDS ── */
+.core-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.core-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:32px;backdrop-filter:blur(8px);transition:border-color .2s,background .2s}
+.core-card:hover{border-color:rgba(255,255,255,0.14);background:rgba(255,255,255,0.05)}
+.core-card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.core-card-icon svg{width:22px;height:22px}
+.core-card h3{font-size:17px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-0.01em}
+.core-card p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.65}
+.core-card-tag{display:inline-block;margin-top:16px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid rgba(255,255,255,0.06);padding:32px var(--gutter);display:flex;align-items:center;justify-content:space-between}
+.footer-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.footer-logo img{width:24px;height:24px;object-fit:contain}
+.footer-logo-name{font-size:13px;font-weight:700;color:#fff}
+.footer-copy{font-size:12px;color:rgba(255,255,255,0.25)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:12px;color:rgba(255,255,255,0.35);text-decoration:none}
+.footer-links a:hover{color:rgba(255,255,255,0.65)}
+
+/* ── RESPONSIVE (cazado con Playwright) ── */
+@media(max-width:760px){
+  nav{padding:0 16px;flex-wrap:wrap;height:auto;gap:8px;padding-top:10px;padding-bottom:10px}
+  .nav-logo{margin-right:0}
+  .nav-links{order:3;width:100%;overflow-x:auto;justify-content:flex-start}
+  .nav-sep{display:none}
+  .nav-cta{margin-left:auto}
+  .core-grid{grid-template-columns:1fr}
+  .hero{padding:48px 20px 40px}
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .section{padding:40px 20px}
+  .hero-h1{font-size:clamp(30px,8vw,44px)}
+}

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atlas v2 — Triage de cómputo cuántico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === TOKENS (spec §11) === */
+:root{
+  /* superficies TRANSLÚCIDAS (frosted) — para que el flotante canónico se vea detrás (regla v1) */
+  --bg-shell:transparent;--bg-topbar:rgba(11,12,18,.62);--bg-sidebar:rgba(14,15,21,.46);--bg-panel:rgba(16,17,24,.34);--bg-card:rgba(24,25,36,.40);--bg-card-hover:rgba(34,35,58,.52);
+  --text-primary:#E2E4EF;--text-secondary:#9CA3C0;--text-muted:#5B6380;--text-link:#818CF8;
+  --border-subtle:rgba(255,255,255,0.06);--border-default:rgba(255,255,255,0.10);--border-strong:rgba(255,255,255,0.18);
+  --verdict-cpu:#22C55E;--verdict-tensor:#3B82F6;--verdict-hpc:#F97316;--verdict-qpu:#8B5CF6;
+  --gate-clifford:#6366F1;--gate-magic:#F59E0B;--gate-measure:#10B981;--gate-comment:#6B7280;
+  --status-ok:#22C55E;--status-warn:#FBBF24;--status-error:#EF4444;--status-info:#60A5FA;
+  /* PALETA CANÓNICA KRENIQ (vibra de v1 — gold/cyan/magenta del logo flotante tricolor) */
+  --brand-primary:#00e5ff;--brand-glow:rgba(0,229,255,0.14);--kq-gold:#f5a623;--kq-cyan:#00e5ff;--kq-mag:#e61062;--kq-cta:#e8185d;
+  --font-sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--font-mono:'JetBrains Mono','Fira Code',monospace;
+  --topbar-h:48px;--sidebar-w:240px;--statusbar-h:28px;
+  --radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-full:9999px;
+  --shadow-card:0 1px 3px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{background:#05060a}
+body{background:transparent;color:var(--text-primary);font-family:var(--font-sans);font-size:15px;overflow:hidden}
+/* FONDO FLOTANTE CANÓNICO (SIEMPRE — regla del usuario; misma paleta/escala que v1·CAPAS) */
+.kq-bg-logo{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;opacity:.8}
+.kq-bg-logo iframe{width:100%;height:100%;border:0;display:block;background:#000;transform:scale(3.35);transform-origin:center center}
+.kq-bg-veil{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 60% 35%,transparent 0%,rgba(5,6,10,.25) 40%,rgba(5,6,10,.6) 100%),linear-gradient(rgba(5,6,10,.4),rgba(5,6,10,.08) 30%,rgba(5,6,10,.5))}
+.topbar,.sidebar,.ed-toolbar,.editor,.triage .verdict-card,.metric,.ledger,.circuit,.statusbar{backdrop-filter:blur(10px) saturate(1.1);-webkit-backdrop-filter:blur(10px) saturate(1.1)}
+/* === SHELL GRID === */
+.shell{display:grid;grid-template-rows:var(--topbar-h) 1fr var(--statusbar-h);grid-template-columns:var(--sidebar-w) 1fr;grid-template-areas:"topbar topbar" "sidebar main" "status status";height:100vh}
+/* === TOPBAR === */
+.topbar{grid-area:topbar;background:var(--bg-topbar);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:16px;padding:0 16px}
+.tb-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;color:#fff}
+.tb-logo .diamond{color:var(--brand-primary);font-size:16px}
+.tb-file{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:5px 12px;font-size:13px;font-family:var(--font-mono);color:var(--text-secondary);cursor:pointer}
+.tb-search{flex:1;max-width:420px;display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:6px 12px;color:var(--text-muted);font-size:13px;cursor:text}
+.tb-search kbd{margin-left:auto;background:rgba(255,255,255,0.06);border-radius:4px;padding:1px 6px;font-size:11px;font-family:var(--font-mono)}
+.tb-spacer{flex:1}
+.tb-lang{display:flex;background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-full);overflow:hidden;font-size:12px;font-weight:600}
+.tb-lang span{padding:4px 11px;color:var(--text-muted);cursor:pointer}
+.tb-lang span.on{background:var(--brand-primary);color:#fff}
+.tb-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-md);color:var(--text-secondary);cursor:pointer}
+.tb-icon:hover{background:var(--bg-card)}
+.tb-avatar{width:30px;height:30px;border-radius:var(--radius-full);background:linear-gradient(135deg,var(--brand-primary),#6366F1);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+/* === SIDEBAR === */
+.sidebar{grid-area:sidebar;background:var(--bg-sidebar);border-right:1px solid var(--border-subtle);padding:16px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.sb-section{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin:14px 8px 6px}
+.sb-section:first-child{margin-top:0}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--radius-md);color:var(--text-secondary);font-size:13.5px;cursor:pointer;border-left:2px solid transparent}
+.sb-item:hover{background:rgba(255,255,255,0.03);color:var(--text-primary)}
+.sb-item.active{background:var(--brand-glow);border-left:2px solid var(--brand-primary);color:#fff;font-weight:600}
+.sb-step{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:var(--radius-md);font-size:13.5px;color:var(--text-secondary)}
+.sb-step .dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;border:1.5px solid var(--step-pending,#4B5563);color:var(--text-muted)}
+.sb-step.complete .dot{background:var(--status-ok);border-color:var(--status-ok);color:#06120A}
+.sb-step.active{color:#fff;font-weight:600}
+.sb-step.active .dot{background:var(--brand-primary);border-color:var(--brand-primary);color:#fff}
+.sb-collapse{margin-top:auto;display:flex;align-items:center;gap:8px;padding:8px 10px;color:var(--text-muted);font-size:12px;cursor:pointer;border-top:1px solid var(--border-subtle);border-radius:0}
+/* === MAIN === */
+.main{grid-area:main;background:var(--bg-shell);display:grid;grid-template-rows:40px 1fr 220px;overflow:hidden}
+.ed-toolbar{display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid var(--border-subtle);background:var(--bg-panel)}
+.ed-toolbar .fname{font-family:var(--font-mono);font-size:13px;color:var(--text-primary)}
+.ed-toolbar .badge{font-size:11px;color:var(--text-muted);background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:2px 8px}
+.ed-toolbar .tb-btn{margin-left:0;font-size:12px;color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:4px 10px;cursor:pointer}
+.split{display:grid;grid-template-columns:40% 60%;overflow:hidden}
+/* EDITOR */
+.editor{border-right:1px solid var(--border-subtle);display:flex;flex-direction:column;background:var(--bg-panel);overflow:hidden;position:relative}
+.editor-code{flex:1;overflow:auto;font-family:var(--font-mono);font-size:13px;line-height:1.6;padding:12px 0}
+.editor-code .ln{display:flex}
+.editor-code .num{width:42px;text-align:right;padding-right:14px;color:var(--text-muted);user-select:none;flex-shrink:0}
+.editor-code .code{white-space:pre}
+.tok-dir{color:var(--brand-primary)}.tok-cliff{color:var(--gate-clifford)}.tok-magic{color:var(--gate-magic)}.tok-meas{color:var(--gate-measure)}.tok-reg{color:var(--text-secondary)}
+.editor-status{border-top:1px solid var(--border-subtle);padding:7px 14px;display:flex;align-items:center;font-size:12px;color:var(--text-secondary);gap:10px}
+.editor-status .ok{color:var(--status-ok)}
+.btn-analyze{position:absolute;right:14px;bottom:46px;background:linear-gradient(135deg,var(--brand-primary),#6366F1);color:#fff;font-weight:700;font-size:13px;padding:9px 18px;border:none;border-radius:var(--radius-md);cursor:pointer;box-shadow:0 4px 16px var(--brand-glow);display:flex;align-items:center;gap:8px}
+/* TRIAGE PANEL */
+.triage{overflow-y:auto;padding:24px;background:var(--bg-shell)}
+.panel-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px}
+.verdict-card{border-radius:var(--radius-lg);padding:24px;margin-bottom:24px;background:rgba(34,197,94,0.08);border:1px solid var(--verdict-cpu);box-shadow:0 0 16px rgba(34,197,94,0.12)}
+.vc-route{font-size:32px;font-weight:800;color:#fff;line-height:1.1;display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.vc-route .dot{width:14px;height:14px;border-radius:50%;background:var(--verdict-cpu);box-shadow:0 0 12px var(--verdict-cpu)}
+.vc-conf{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:14px;color:var(--text-secondary)}
+.vc-bar{flex:0 0 180px;height:8px;border-radius:var(--radius-full);background:rgba(255,255,255,0.08);overflow:hidden}
+.vc-bar i{display:block;height:100%;width:88%;background:var(--verdict-cpu);border-radius:var(--radius-full)}
+.vc-conf b{color:#fff;font-weight:700}
+.vc-conf .lvl{font-size:11px;font-weight:700;color:var(--verdict-cpu);background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:var(--radius-sm);padding:2px 8px}
+.vc-rationale{font-size:15px;line-height:1.6;color:var(--text-primary);margin-bottom:20px;max-width:560px}
+.vc-actions{display:flex;gap:12px}
+.vc-btn{font-size:13px;font-weight:600;padding:9px 16px;border-radius:var(--radius-md);cursor:pointer;border:1px solid var(--border-default);background:var(--bg-card);color:var(--text-primary)}
+.vc-btn.primary{background:rgba(34,197,94,0.14);border-color:rgba(34,197,94,0.4);color:#fff}
+/* METRICS ROW */
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+.metric{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;position:relative}
+.metric.governed{border-color:var(--verdict-cpu);box-shadow:0 0 0 1px rgba(34,197,94,0.3)}
+.metric .mlabel{font-size:10px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);line-height:1.3;min-height:26px}
+.metric .mval{font-size:30px;font-weight:800;color:#fff;line-height:1;margin:6px 0 8px}
+.metric .mval sup{font-size:16px}
+.metric .mbadge{font-size:9px;font-weight:700;letter-spacing:0.03em;padding:2px 7px;border-radius:var(--radius-sm);display:inline-block}
+.mb-exact{background:rgba(34,197,94,0.14);color:var(--status-ok)}
+.mb-heur{background:rgba(251,191,36,0.14);color:var(--status-warn)}
+.mb-skip{background:rgba(255,255,255,0.06);color:var(--text-muted)}
+/* EVIDENCE LEDGER */
+.ledger{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-md);overflow:hidden}
+.ledger-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border-subtle)}
+.ledger table{width:100%;border-collapse:collapse;font-size:13px}
+.ledger th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);font-weight:600;padding:8px 16px;background:rgba(255,255,255,0.02)}
+.ledger td{padding:10px 16px;border-top:1px solid var(--border-subtle);color:var(--text-secondary);font-family:var(--font-mono);font-size:12.5px}
+.ledger tr.gov td{background:rgba(34,197,94,0.06)}
+.ledger tr.gov td:last-child{color:var(--verdict-cpu);font-weight:700;font-family:var(--font-sans)}
+.gov-pill{font-size:9px;font-weight:700;background:rgba(34,197,94,0.16);color:var(--verdict-cpu);border-radius:var(--radius-sm);padding:2px 6px;margin-left:6px}
+.warn-pill{color:var(--status-warn)}
+/* CIRCUIT VISUALIZER */
+.circuit{grid-row:3;border-top:1px solid var(--border-subtle);background:var(--bg-panel);display:flex;flex-direction:column;overflow:hidden}
+.circuit-head{display:flex;align-items:center;gap:12px;padding:8px 16px;border-bottom:1px solid var(--border-subtle);font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted)}
+.circuit-head .extras{margin-left:auto;display:flex;gap:8px;font-size:11px;color:var(--text-secondary)}
+.circuit-head .extras span{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:3px 9px;cursor:pointer}
+.circuit-body{flex:1;overflow:auto;padding:10px 16px;font-family:var(--font-mono);font-size:12px}
+.q-lane{display:flex;align-items:center;gap:4px;height:30px;color:var(--text-muted)}
+.q-lane .qlabel{width:42px;color:var(--text-secondary)}
+.q-lane .wire{flex:1;height:1px;background:var(--border-default);position:relative}
+.gate{width:24px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.g-h{background:var(--gate-clifford)}.g-t{background:var(--gate-magic);color:#1a1205}.g-cx{background:transparent;border:1.5px solid var(--gate-clifford);color:var(--gate-clifford)}
+/* STATUS BAR */
+.statusbar{grid-area:status;background:var(--bg-topbar);border-top:1px solid var(--border-subtle);display:flex;align-items:center;gap:16px;padding:0 16px;font-size:12px;color:var(--text-secondary);font-family:var(--font-mono)}
+.statusbar .ok{color:var(--status-ok)}
+.statusbar .right{margin-left:auto;display:flex;gap:14px;align-items:center}
+.statusbar .v2tag{background:var(--brand-glow);color:var(--brand-primary);border-radius:var(--radius-sm);padding:1px 7px;font-weight:700;font-family:var(--font-sans)}
+@media(max-width:1024px){.shell{grid-template-columns:48px 1fr}.sidebar{padding:12px 6px}.sb-item span,.sb-step span,.sb-section,.sb-collapse span{display:none}.split{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+</style></head>
+<body>
+<!-- FONDO FLOTANTE CANÓNICO (siempre presente, no se cambia) -->
+<div class="kq-bg-logo"><iframe src="/vendor/logo_kreniq_volum_trico.html" scrolling="no" tabindex="-1" aria-hidden="true"></iframe></div><div class="kq-bg-veil"></div>
+<div class="shell">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a class="tb-logo" href="/" style="text-decoration:none;gap:8px"><img src="/vendor/krenniq-logo.png" alt="Krenn-IQ" style="width:26px;height:26px;object-fit:contain"><span style="line-height:1"><b style="color:#fff;font-weight:800;font-size:14px">Atlas</b><br><span style="font-size:8px;color:#5B6380;letter-spacing:.1em;text-transform:uppercase">by Krenn·IQ</span></span></a>
+    <div class="tb-file">circuit.qasm <span style="color:var(--text-muted)">▾</span></div>
+    <div class="tb-search">⌕ Buscar acción… <kbd>⌘K</kbd></div>
+    <div class="tb-spacer"></div>
+    <div class="tb-lang"><span class="on">ES</span><span>EN</span></div>
+    <div class="tb-icon" title="Ayuda">?</div>
+    <div class="tb-avatar">K</div>
+  </header>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-section" style="margin-top:0">Flujo</div>
+    <div class="sb-step complete"><span class="dot">✓</span><span>① Definir circuito</span></div>
+    <div class="sb-step active"><span class="dot">◎</span><span>② Explorar espacio</span></div>
+    <div class="sb-step"><span class="dot">3</span><span>③ Medir dureza</span></div>
+    <div class="sb-step"><span class="dot">4</span><span>④ Decidir ruta</span></div>
+    <div class="sb-section">Vistas</div>
+    <div class="sb-item"><span>✎</span><span>Editor</span></div>
+    <div class="sb-item active"><span>⊞</span><span>Triage</span></div>
+    <div class="sb-item"><span>◉</span><span>Explorar</span></div>
+    <div class="sb-item"><span>↗</span><span>Construir</span></div>
+    <div class="sb-section">Herramientas</div>
+    <div class="sb-item"><span>📊</span><span>Diagnóstico</span></div>
+    <div class="sb-item"><span>🧭</span><span>Complejidad</span></div>
+    <div class="sb-item"><span>🧩</span><span>Segmentos</span></div>
+    <div class="sb-item"><span>🖥</span><span>Ruta GPU</span></div>
+    <div class="sb-item"><span>🎯</span><span>Embedding</span></div>
+    <div class="sb-item"><span>📡</span><span>Alcanzabilidad</span></div>
+    <div class="sb-collapse"><span>◄ Colapsar</span></div>
+  </nav>
+  <!-- MAIN -->
+  <main class="main">
+    <div class="ed-toolbar">
+      <span class="fname">circuit.qasm</span>
+      <span class="badge">OpenQASM 2.0</span>
+      <div class="tb-spacer"></div>
+      <span class="tb-btn">Ejemplo ▾</span>
+      <span class="tb-btn">Limpiar</span>
+    </div>
+    <div class="split">
+      <!-- EDITOR -->
+      <div class="editor">
+        <div class="editor-code">
+          <div class="ln"><span class="num">1</span><span class="code"><span class="tok-dir">OPENQASM</span> 2.0;</span></div>
+          <div class="ln"><span class="num">2</span><span class="code"><span class="tok-dir">include</span> "qelib1.inc";</span></div>
+          <div class="ln"><span class="num">3</span><span class="code"><span class="tok-reg">qreg q[14];</span></span></div>
+          <div class="ln"><span class="num">4</span><span class="code"><span class="tok-cliff">h</span> q[0];</span></div>
+          <div class="ln"><span class="num">5</span><span class="code"><span class="tok-magic">t</span> q[1];</span></div>
+          <div class="ln"><span class="num">6</span><span class="code"><span class="tok-cliff">cx</span> q[0], q[1];</span></div>
+          <div class="ln"><span class="num">7</span><span class="code"><span class="tok-cliff">h</span> q[2];</span></div>
+          <div class="ln"><span class="num">8</span><span class="code"><span class="tok-magic">t</span> q[2];</span></div>
+          <div class="ln"><span class="num">9</span><span class="code"><span class="tok-cliff">cx</span> q[1], q[2];</span></div>
+          <div class="ln"><span class="num">10</span><span class="code"><span class="tok-cliff">h</span> q[3];</span></div>
+          <div class="ln"><span class="num">11</span><span class="code"><span class="tok-magic">t</span> q[3];</span></div>
+          <div class="ln"><span class="num">…</span><span class="code" style="color:var(--text-muted)">  (142 líneas)</span></div>
+        </div>
+        <button class="btn-analyze">▶ Analizar <kbd style="font-size:10px;opacity:.7">⌘↵</kbd></button>
+        <div class="editor-status"><span class="ok">✓ Válido</span> · 1399 chars · n=14 · #T=35</div>
+      </div>
+      <!-- TRIAGE -->
+      <div class="triage">
+        <div class="panel-label">Veredicto de cómputo</div>
+        <div class="verdict-card" role="region" aria-label="Veredicto de cómputo">
+          <div class="vc-route"><span class="dot"></span>CPU — Simulación Tensorial (MPS)</div>
+          <div class="vc-conf"><span>Confianza</span><span class="vc-bar"><i></i></span><b>88/100</b><span class="lvl">ALTO</span></div>
+          <div class="vc-rationale">El MPS bond permanece en 2² — rango clásico práctico. No es necesario el QPU para este circuito.</div>
+          <div class="vc-actions"><button class="vc-btn primary">▶ Ver ruta completa</button><button class="vc-btn">⎋ Cambiar parámetros</button></div>
+        </div>
+        <div class="panel-label">Métricas</div>
+        <div class="metrics">
+          <div class="metric"><div class="mlabel">Índice de dureza</div><div class="mval">42</div><div class="mbadge mb-heur">TENSOR zone</div></div>
+          <div class="metric"><div class="mlabel">#T magia</div><div class="mval">35</div><div class="mbadge mb-exact">exacto</div></div>
+          <div class="metric governed"><div class="mlabel">MPS bond</div><div class="mval">2<sup>2</sup></div><div class="mbadge mb-exact">exacto</div></div>
+          <div class="metric"><div class="mlabel">Treewidth</div><div class="mval">2<sup>14</sup></div><div class="mbadge mb-heur">heurístico</div></div>
+          <div class="metric"><div class="mlabel">Spread Pauli</div><div class="mval" style="font-size:22px;color:var(--text-muted)">n/a</div><div class="mbadge mb-skip">saltado</div></div>
+        </div>
+        <div class="panel-label">Evidencia medida</div>
+        <div class="ledger">
+          <div class="ledger-head"><span>Evidencia medida</span><span>¿Gobernó?</span></div>
+          <table>
+            <tr><th>Métrica</th><th>Valor</th><th>Método</th><th>Tipo</th><th></th></tr>
+            <tr><td>#T (magia)</td><td>35</td><td>parser</td><td>medido</td><td>○</td></tr>
+            <tr class="gov"><td>MPS bond</td><td>2²</td><td>quimb</td><td>exacto</td><td>● <span class="gov-pill">GOBERNÓ</span></td></tr>
+            <tr><td>Treewidth</td><td>2¹⁴</td><td>cotengra</td><td>cota sup.</td><td>○</td></tr>
+            <tr><td>Spread Pauli</td><td>n/a</td><td>pauli-prop</td><td>saltado</td><td>—</td></tr>
+            <tr><td>S_max</td><td>2.61</td><td>statevector</td><td>exacto</td><td class="warn-pill">○ ⚠</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- CIRCUIT VISUALIZER -->
+    <div class="circuit">
+      <div class="circuit-head">Circuito
+        <div class="extras"><span>QASM normalizado ▾</span><span>♪ Audio</span><span>↓ WAV</span></div>
+      </div>
+      <div class="circuit-body" id="circ"></div>
+    </div>
+  </main>
+  <!-- STATUS BAR -->
+  <footer class="statusbar">
+    <span class="ok">● Listo en 0.94s</span><span>n=14 qubits</span><span>#T=35</span>
+    <span>Stim ✓ quimb ✓ cotengra ✓</span>
+    <div class="right"><span class="v2tag">v2</span><span>Ln 7, Col 1</span><span>ES ▾</span></div>
+  </footer>
+</div>
+<script>
+// render simple de lanes (SVG nativo, spec §7) — mock determinista
+(function(){
+  var rows=[],gates=[['h'],['h','t'],['h','t'],['h','t'],['h'],['','t'],['h'],['','t']];
+  for(var q=0;q<8;q++){
+    var lane='<div class="q-lane"><span class="qlabel">q['+q+']</span><span class="wire"></span>';
+    rows.push(lane+'</div>');
+  }
+  // overlay de gates: render una secuencia representativa por lane
+  var html='';
+  for(var q=0;q<8;q++){
+    html+='<div class="q-lane"><span class="qlabel">q['+q+']</span>';
+    for(var c=0;c<14;c++){
+      var g='';
+      if(c===0)g='<span class="gate g-h">H</span>';
+      else if((q+c)%4===0)g='<span class="gate g-t">T</span>';
+      else if((q+c)%5===0)g='<span class="gate g-cx">⊕</span>';
+      else g='<span style="width:24px;flex-shrink:0;text-align:center;color:var(--border-default)">─</span>';
+      html+=g;
+    }
+    html+='</div>';
+  }
+  document.getElementById('circ').innerHTML=html;
+})();
+</script>
+</body></html>

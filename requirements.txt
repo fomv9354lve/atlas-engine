@@ -1,0 +1,14 @@
+# Atlas — core runtime deps (the triage web app). Pinned to the verified-working set.
+# Install:  python3 -m pip install -r requirements.txt
+numpy==2.4.6
+scipy==1.17.1
+stim==1.16.0
+quimb==1.14.0
+cotengra==0.8.1
+qiskit==2.4.2        # OpenQASM normalization + QASM dumps in the certificate
+networkx             # coupling-graph treewidth / effective-capacity / embedding (atlas_hardware)
+# Optional (not needed to run the triage web app):
+#   anthropic            -> the in-app "Ask Chat" (external LLM; data egress, see UI notice)
+#   qiskit-ibm-runtime   -> benchmarks/qpu_validation.py (real-hardware validation)
+#   scikit-learn         -> research / calibration utilities only
+# see requirements-optional.txt

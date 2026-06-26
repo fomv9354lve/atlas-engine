@@ -1,0 +1,159 @@
+{
+  "what": "Applicability Domain + FalseVerify of the Atlas triage instrument (additive)",
+  "corpus_n": 2517,
+  "features": [
+    "n",
+    "t_count",
+    "mps_log2",
+    "treewidth_log2"
+  ],
+  "applicability_domain": {
+    "leverage_threshold_h_star": 0.00596,
+    "n_outside_AD": 76,
+    "frac_outside_AD": 0.0302,
+    "note": "outside-AD = the predictor extrapolates; its confidence is less trustworthy there"
+  },
+  "falseverify": {
+    "definition": "HIGH confidence (>=75) AND wrong route vs oracle",
+    "count": 0,
+    "n_high_conf": 1983,
+    "rate": 0.0,
+    "wilson95_upper": 0.00136,
+    "confident_wrong_over_70": 0,
+    "alphafold2_foldswitch_reference": 0.336,
+    "reading": "Atlas's confidence is NOT decoupled from correctness: every error sits in the low-confidence, already-flagged region \u2014 the opposite of the AlphaFold pathology"
+  },
+  "falseverify_by_confidence_band": [
+    {
+      "conf": "0-35",
+      "n": 90,
+      "wrong": 11,
+      "acc": 0.8778
+    },
+    {
+      "conf": "35-45",
+      "n": 154,
+      "wrong": 0,
+      "acc": 1.0
+    },
+    {
+      "conf": "45-75",
+      "n": 290,
+      "wrong": 0,
+      "acc": 1.0
+    },
+    {
+      "conf": "75-90",
+      "n": 1767,
+      "wrong": 0,
+      "acc": 1.0
+    },
+    {
+      "conf": "90-101",
+      "n": 216,
+      "wrong": 0,
+      "acc": 1.0
+    }
+  ],
+  "epistemic_vs_aleatoric": {
+    "uncertain_set_n": 534,
+    "epistemic_out_of_AD": 67,
+    "aleatoric_in_AD": 467,
+    "meaning": "epistemic = reducible with more corpus (out of AD); aleatoric = irreducible (Leone 2602.22330, in AD but fundamentally ambiguous). The field conflates them."
+  },
+  "errors_severity": [
+    {
+      "id": "ladder_n24_med_med_s0_27",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s1_127",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s3_327",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s4_427",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s5_527",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s6_627",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "ladder_n24_med_med_s7_727",
+      "conf": 18.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0038,
+      "out_of_AD": false
+    },
+    {
+      "id": "moat_ladder_n22_t8_s2",
+      "conf": 34.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0043,
+      "out_of_AD": false
+    },
+    {
+      "id": "moat_ladder_n24_t8_s2",
+      "conf": 34.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0044,
+      "out_of_AD": false
+    },
+    {
+      "id": "moat_ladder_n24_t32_s1",
+      "conf": 34.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0037,
+      "out_of_AD": false
+    },
+    {
+      "id": "moat_ladder_n28_t8_s3",
+      "conf": 34.0,
+      "mps_log2": 6.0,
+      "dist_to_cpu_cut": 0.5,
+      "leverage": 0.0046,
+      "out_of_AD": false
+    }
+  ],
+  "caveats": [
+    "FalseVerify is measured on the CERTIFIED region (exact ground truth). In the genuinely quantum-hard regime (no classical oracle) FalseVerify is unmeasurable by construction.",
+    "Leverage AD uses 4 standardized features; richer features (depth, connectivity, noise) sharpen it.",
+    "Epistemic/aleatoric is an operational proxy (out-of-AD vs in-AD), not a fundamental decomposition."
+  ]
+}

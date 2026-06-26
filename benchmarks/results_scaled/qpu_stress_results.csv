@@ -1,0 +1,9 @@
+name,kind,n,depth,t_count,mps_log2,tw_greedy_log2,atlas_route,tvd_ideal_qpu,tvd_qpu_uniform,layout
+disc_n20_d2,discriminant,20,2,40,1.0,20.0,CPU,0.999,0.999,
+ramp_n12_d2,collapse,12,2,24,1.0,12.0,CPU,0.7766,0.7766,
+ramp_n12_d8,collapse,12,8,96,6.0,16.0,CPU,0.7793,0.7793,
+ramp_n12_d16,collapse,12,16,192,5.86,17.0,CPU,0.7817,0.7817,
+ramp_n12_d24,collapse,12,24,288,6.0,17.0,CPU,0.78,0.78,
+ramp_n12_d32,collapse,12,32,384,4.0,17.0,CPU,0.7791,0.7791,
+ghz6_GOOD,embedding,6,,0,1.0,6.0,CPU,0.0811,0.8877,"[0, 1, 2, 3, 4, 5]"
+ghz6_TLS,embedding,6,,0,1.0,6.0,CPU,0.7822,0.7363,"[110, 111, 112, 113, 114, 115]"

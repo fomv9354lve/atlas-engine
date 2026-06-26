@@ -1,0 +1,339 @@
+{
+  "n_total": 800,
+  "n_certified": 800,
+  "route_metrics_certified": {
+    "atlas": {
+      "accuracy": 0.99125,
+      "mean_ordinal_error": 0.00875
+    },
+    "treewidth_only": {
+      "accuracy": 0.72375,
+      "mean_ordinal_error": 0.475
+    },
+    "mps_only": {
+      "accuracy": 0.83625,
+      "mean_ordinal_error": 0.16375
+    },
+    "magic_only": {
+      "accuracy": 0.33125,
+      "mean_ordinal_error": 0.74875
+    }
+  },
+  "route_metrics_full": {
+    "atlas": {
+      "accuracy": 0.99125,
+      "mean_ordinal_error": 0.00875
+    },
+    "treewidth_only": {
+      "accuracy": 0.72375,
+      "mean_ordinal_error": 0.475
+    },
+    "mps_only": {
+      "accuracy": 0.83625,
+      "mean_ordinal_error": 0.16375
+    },
+    "magic_only": {
+      "accuracy": 0.33125,
+      "mean_ordinal_error": 0.74875
+    }
+  },
+  "failure_modes": {
+    "atlas_false_safety": 0,
+    "atlas_false_alarm": 0,
+    "treewidth_only_false_alarm": 166,
+    "mps_only_false_safety": 16
+  },
+  "failure_mode_ids": {
+    "atlas_false_safety": [],
+    "atlas_false_alarm": [],
+    "treewidth_only_false_alarm": [
+      "line_n30_low_clifford_s0_13",
+      "line_n30_med_low_s0_14",
+      "line_n30_high_med_s0_15",
+      "ladder_n24_high_high_s0_28",
+      "ladder_n30_low_high_s0_29",
+      "ladder_n30_high_clifford_s0_30",
+      "grid_n20_high_low_s0_38",
+      "grid_n24_med_high_s0_40",
+      "grid_n24_high_high_s0_41",
+      "grid_n30_med_clifford_s0_42",
+      "star_n30_low_med_s0_57",
+      "star_n30_med_high_s0_58",
+      "heavy_hex_n30_low_clifford_s0_72",
+      "heavy_hex_n30_med_low_s0_73",
+      "dense_core_n16_high_high_s0_82",
+      "dense_core_n20_high_low_s0_84",
+      "dense_core_n24_med_med_s0_86",
+      "dense_core_n24_high_high_s0_87",
+      "dense_core_n30_low_high_s0_88",
+      "dense_core_n30_high_clifford_s0_89",
+      "all_to_all_sparse_n16_high_low_s0_97",
+      "line_n30_low_clifford_s1_113",
+      "line_n30_med_low_s1_114",
+      "line_n30_high_med_s1_115",
+      "ladder_n24_high_high_s1_128",
+      "ladder_n30_low_high_s1_129",
+      "ladder_n30_high_clifford_s1_130",
+      "grid_n20_high_low_s1_138",
+      "grid_n24_med_high_s1_140",
+      "grid_n24_high_high_s1_141",
+      "grid_n30_med_clifford_s1_142",
+      "star_n24_high_med_s1_156",
+      "star_n30_low_med_s1_157",
+      "star_n30_med_high_s1_158",
+      "heavy_hex_n30_low_clifford_s1_172",
+      "heavy_hex_n30_med_low_s1_173",
+      "dense_core_n16_high_high_s1_182",
+      "dense_core_n20_med_clifford_s1_183",
+      "dense_core_n20_high_low_s1_184",
+      "dense_core_n24_med_med_s1_186",
+      "dense_core_n24_high_high_s1_187",
+      "dense_core_n30_low_high_s1_188",
+      "dense_core_n30_high_clifford_s1_189",
+      "all_to_all_sparse_n20_med_high_s1_199",
+      "line_n30_low_clifford_s2_213",
+      "line_n30_med_low_s2_214",
+      "line_n30_high_med_s2_215",
+      "ladder_n30_low_high_s2_229",
+      "ladder_n30_high_clifford_s2_230",
+      "grid_n20_high_low_s2_238",
+      "grid_n24_med_high_s2_240",
+      "grid_n24_high_high_s2_241",
+      "grid_n30_med_clifford_s2_242",
+      "star_n30_low_med_s2_257",
+      "star_n30_med_high_s2_258",
+      "heavy_hex_n30_low_clifford_s2_272",
+      "heavy_hex_n30_med_low_s2_273",
+      "dense_core_n16_high_high_s2_282",
+      "dense_core_n20_high_low_s2_284",
+      "dense_core_n24_med_med_s2_286",
+      "dense_core_n24_high_high_s2_287",
+      "dense_core_n30_low_high_s2_288",
+      "dense_core_n30_high_clifford_s2_289",
+      "all_to_all_sparse_n20_med_high_s2_299",
+      "line_n30_low_clifford_s3_313",
+      "line_n30_med_low_s3_314",
+      "line_n30_high_med_s3_315",
+      "ladder_n30_low_high_s3_329",
+      "ladder_n30_high_clifford_s3_330",
+      "grid_n20_high_low_s3_338",
+      "grid_n24_med_high_s3_340",
+      "grid_n24_high_high_s3_341",
+      "grid_n30_med_clifford_s3_342",
+      "star_n24_high_med_s3_356",
+      "star_n30_low_med_s3_357",
+      "star_n30_med_high_s3_358",
+      "heavy_hex_n30_low_clifford_s3_372",
+      "heavy_hex_n30_med_low_s3_373",
+      "dense_core_n16_high_high_s3_382",
+      "dense_core_n20_high_low_s3_384",
+      "dense_core_n24_med_med_s3_386",
+      "dense_core_n24_high_high_s3_387",
+      "dense_core_n30_low_high_s3_388",
+      "dense_core_n30_high_clifford_s3_389",
+      "line_n30_low_clifford_s4_413",
+      "line_n30_med_low_s4_414",
+      "line_n30_high_med_s4_415",
+      "ladder_n24_high_high_s4_428",
+      "ladder_n30_low_high_s4_429",
+      "ladder_n30_high_clifford_s4_430",
+      "grid_n20_high_low_s4_438",
+      "grid_n24_med_high_s4_440",
+      "grid_n24_high_high_s4_441",
+      "grid_n30_med_clifford_s4_442",
+      "star_n24_high_med_s4_456",
+      "star_n30_low_med_s4_457",
+      "star_n30_med_high_s4_458",
+      "heavy_hex_n30_low_clifford_s4_472",
+      "heavy_hex_n30_med_low_s4_473",
+      "dense_core_n20_high_low_s4_484",
+      "dense_core_n24_med_med_s4_486",
+      "dense_core_n24_high_high_s4_487",
+      "dense_core_n30_low_high_s4_488",
+      "dense_core_n30_high_clifford_s4_489",
+      "all_to_all_sparse_n16_high_low_s4_497",
+      "all_to_all_sparse_n20_med_high_s4_499",
+      "line_n30_low_clifford_s5_513",
+      "line_n30_med_low_s5_514",
+      "line_n30_high_med_s5_515",
+      "ladder_n30_low_high_s5_529",
+      "ladder_n30_high_clifford_s5_530",
+      "grid_n20_high_low_s5_538",
+      "grid_n24_high_high_s5_541",
+      "grid_n30_med_clifford_s5_542",
+      "star_n24_high_med_s5_556",
+      "star_n30_low_med_s5_557",
+      "star_n30_med_high_s5_558",
+      "heavy_hex_n30_low_clifford_s5_572",
+      "heavy_hex_n30_med_low_s5_573",
+      "dense_core_n16_high_high_s5_582",
+      "dense_core_n20_med_clifford_s5_583",
+      "dense_core_n20_high_low_s5_584",
+      "dense_core_n24_med_med_s5_586",
+      "dense_core_n24_high_high_s5_587",
+      "dense_core_n30_low_high_s5_588",
+      "dense_core_n30_high_clifford_s5_589",
+      "all_to_all_sparse_n20_med_high_s5_599",
+      "line_n30_low_clifford_s6_613",
+      "line_n30_med_low_s6_614",
+      "line_n30_high_med_s6_615",
+      "ladder_n30_low_high_s6_629",
+      "ladder_n30_high_clifford_s6_630",
+      "grid_n20_high_low_s6_638",
+      "grid_n24_med_high_s6_640",
+      "grid_n24_high_high_s6_641",
+      "grid_n30_med_clifford_s6_642",
+      "star_n30_low_med_s6_657",
+      "star_n30_med_high_s6_658",
+      "heavy_hex_n30_low_clifford_s6_672",
+      "heavy_hex_n30_med_low_s6_673",
+      "dense_core_n20_high_low_s6_684",
+      "dense_core_n24_med_med_s6_686",
+      "dense_core_n24_high_high_s6_687",
+      "dense_core_n30_low_high_s6_688",
+      "dense_core_n30_high_clifford_s6_689",
+      "line_n30_low_clifford_s7_713",
+      "line_n30_med_low_s7_714",
+      "line_n30_high_med_s7_715",
+      "ladder_n30_low_high_s7_729",
+      "ladder_n30_high_clifford_s7_730",
+      "grid_n20_high_low_s7_738",
+      "grid_n24_med_high_s7_740",
+      "grid_n24_high_high_s7_741",
+      "grid_n30_med_clifford_s7_742",
+      "star_n24_high_med_s7_756",
+      "star_n30_low_med_s7_757",
+      "star_n30_med_high_s7_758",
+      "heavy_hex_n30_low_clifford_s7_772",
+      "heavy_hex_n30_med_low_s7_773",
+      "dense_core_n16_high_high_s7_782",
+      "dense_core_n20_high_low_s7_784",
+      "dense_core_n24_med_med_s7_786",
+      "dense_core_n24_high_high_s7_787",
+      "dense_core_n30_low_high_s7_788",
+      "dense_core_n30_high_clifford_s7_789",
+      "all_to_all_sparse_n20_med_high_s7_799"
+    ],
+    "mps_only_false_safety": [
+      "grid_n30_high_low_s0_43",
+      "heavy_hex_n30_high_med_s0_74",
+      "grid_n30_high_low_s1_143",
+      "heavy_hex_n30_high_med_s1_174",
+      "grid_n30_high_low_s2_243",
+      "heavy_hex_n30_high_med_s2_274",
+      "grid_n30_high_low_s3_343",
+      "heavy_hex_n30_high_med_s3_374",
+      "grid_n30_high_low_s4_443",
+      "heavy_hex_n30_high_med_s4_474",
+      "grid_n30_high_low_s5_543",
+      "heavy_hex_n30_high_med_s5_574",
+      "grid_n30_high_low_s6_643",
+      "heavy_hex_n30_high_med_s6_674",
+      "grid_n30_high_low_s7_743",
+      "heavy_hex_n30_high_med_s7_774"
+    ]
+  },
+  "uncertified_tail": {
+    "uncertified_total": 0,
+    "uncertified_truncated_mps": 0,
+    "mps_only_says_cheap_on_truncated": 0,
+    "atlas_escalates_on_truncated": 0,
+    "mps_false_safety_exposure_atlas_guards": 0,
+    "example_ids": []
+  },
+  "score_calibration": {
+    "percentile_table": [
+      {
+        "percentile": 10,
+        "score_threshold": 20.0
+      },
+      {
+        "percentile": 25,
+        "score_threshold": 26.0
+      },
+      {
+        "percentile": 50,
+        "score_threshold": 32.0
+      },
+      {
+        "percentile": 75,
+        "score_threshold": 42.0
+      },
+      {
+        "percentile": 90,
+        "score_threshold": 42.0
+      },
+      {
+        "percentile": 95,
+        "score_threshold": 70.0
+      },
+      {
+        "percentile": 99,
+        "score_threshold": 100.0
+      }
+    ],
+    "score_vs_union_cost_spearman": 0.8288396153023627,
+    "score_vs_union_cost_pearson": 0.7349546897726197,
+    "score_vs_union_cost_kendall": 0.6070369211514393
+  },
+  "confidence_reliability": {
+    "bands": [
+      {
+        "band": "low",
+        "n": 7,
+        "empirical_accuracy": 0.0,
+        "mean_confidence": 0.34
+      },
+      {
+        "band": "medium",
+        "n": 172,
+        "empirical_accuracy": 1.0,
+        "mean_confidence": 0.511
+      },
+      {
+        "band": "high",
+        "n": 621,
+        "empirical_accuracy": 1.0,
+        "mean_confidence": 0.886
+      }
+    ],
+    "deciles": [
+      {
+        "conf_bin": "30-40",
+        "n": 7,
+        "accuracy": 0.0
+      },
+      {
+        "conf_bin": "40-50",
+        "n": 54,
+        "accuracy": 1.0
+      },
+      {
+        "conf_bin": "50-60",
+        "n": 112,
+        "accuracy": 1.0
+      },
+      {
+        "conf_bin": "60-70",
+        "n": 6,
+        "accuracy": 1.0
+      },
+      {
+        "conf_bin": "70-80",
+        "n": 65,
+        "accuracy": 1.0
+      },
+      {
+        "conf_bin": "80-90",
+        "n": 390,
+        "accuracy": 1.0
+      },
+      {
+        "conf_bin": "90-100",
+        "n": 166,
+        "accuracy": 1.0
+      }
+    ],
+    "n_certified": 800
+  }
+}

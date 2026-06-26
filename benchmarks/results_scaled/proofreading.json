@@ -1,0 +1,52 @@
+{
+  "what": "Thermodynamic / kinetic-proofreading curve of the triage (additive measurement)",
+  "lens": "Hopfield-Ninio kinetic proofreading; Landauer bound; Thermodynamic Uncertainty Relation",
+  "corpus_n": 800,
+  "H_route_bits": 0.4689,
+  "proofreading_curve": [
+    {
+      "step": 1,
+      "estimator": "magic/#T (+Clifford pre-check)",
+      "step_cost_s": 0.001,
+      "cumulative_cost_s": 0.001,
+      "cumulative_bits": 0.1072,
+      "marginal_bits": 0.1072,
+      "marginal_bits_per_second": 107.2105,
+      "frac_of_H_route": 0.2286
+    },
+    {
+      "step": 2,
+      "estimator": "MPS bond (quimb)",
+      "step_cost_s": 0.9,
+      "cumulative_cost_s": 0.901,
+      "cumulative_bits": 0.239,
+      "marginal_bits": 0.1318,
+      "marginal_bits_per_second": 0.1464,
+      "frac_of_H_route": 0.5097
+    },
+    {
+      "step": 3,
+      "estimator": "treewidth (cotengra greedy)",
+      "step_cost_s": 1.5,
+      "cumulative_cost_s": 2.401,
+      "cumulative_bits": 0.305,
+      "marginal_bits": 0.0661,
+      "marginal_bits_per_second": 0.044,
+      "frac_of_H_route": 0.6506
+    }
+  ],
+  "diminishing_efficiency": true,
+  "efficiency_cliff_after_pre_check_x": 732.3,
+  "efficiency_floor_bits_per_s": 0.01,
+  "optimal_stop_step": 3,
+  "reading": {
+    "kinetic_proofreading": "each estimator is a proofreading step buying route-information with compute",
+    "early_exit": "cheap steps carry most bits/second -> the Unified Core early-exit ordering is the thermodynamically efficient order, now grounded empirically",
+    "medium_is_optimal_abstention": "when the full chain still leaves residual route-uncertainty, paying more dissipation is wasted -> MEDIUM is the optimal stop"
+  },
+  "caveats": [
+    "Information is measured exactly (bits, Miller-Madow). Cost is representative per-estimator wall-clock on a dev M4 (threshold_calibration.json / scale_ceiling.json), not per-circuit timed.",
+    "Landauer/TUR are the conceptual lens; we quantify bits and compute-cost, not Joules.",
+    "Single-estimator-only route classes exist on the 800-row stratified set."
+  ]
+}

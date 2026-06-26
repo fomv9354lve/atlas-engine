@@ -1,0 +1,39 @@
+stuck run killed
+NS capped to <=26
+OK, relanzando
+stratified corpus: 10 families x 4 n x 3 T x 3 seeds
+  60/360  (119s)
+  120/360  (213s)
+  180/360  (386s)
+  240/360  (486s)
+  300/360  (575s)
+  360/360  (1073s)
+
+=== STRESS TEST: 360 circuits, 360 oracle-certified ===
+
+Atlas route-correctness (certified regime): 360/360 = 1.0000  Wilson95 [0.9894,1.0]
+false-safety: 0/0 on true-hard  Wilson95 (nan, nan)
+false-alarm:  0/360 on true-cheap Wilson95 (0.0, 0.0106)
+
+per oracle-route accuracy (certified):
+  cpu        342/342 = 1.000  Wilson95 (0.9889, 1.0)
+  tensor     18/18 = 1.000  Wilson95 (0.8241, 1.0)
+
+per family accuracy (certified):
+  line        36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  star        36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  ring        36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  ladder      36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  cycle2      36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  grid        36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  tree        36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  ring_sw     36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  wideband12  36/36 = 1.000  Wilson95 (0.9036, 1.0)
+  expander    36/36 = 1.000  Wilson95 (0.9036, 1.0)
+
+uncertifiable regime (no classical ground truth): 0 circuits (atlas routes: {})
+
+false-safety GUARD: catches 0/0 under-routes; over-flags 0/342 of clean cpu==cpu
+
+=== determinism: re-run 24 circuits x3 (same circuit) ===
+  non-deterministic circuits: 0/24  (DETERMINISTIC)

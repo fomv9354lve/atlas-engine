@@ -1,0 +1,112 @@
+{
+  "backend": "ibm_kingston",
+  "n": 12,
+  "family": "2D-random Porter-Thomas",
+  "metric": "linear-XEB normalizada por colisi\u00f3n real",
+  "rates_used": {
+    "e_cz_median": 0.0018495,
+    "e_sx_median": 0.000238,
+    "e_ro_median": 0.00818
+  },
+  "points": [
+    {
+      "depth": 2,
+      "F_inf": 0.8836,
+      "F_meas": 0.9647,
+      "collision": 36.0,
+      "n_cx": 9,
+      "n_1q": 36,
+      "shots": 2048
+    },
+    {
+      "depth": 4,
+      "F_inf": 0.8576,
+      "F_meas": 0.8537,
+      "collision": 6.0,
+      "n_cx": 22,
+      "n_1q": 60,
+      "shots": 2048
+    },
+    {
+      "depth": 6,
+      "F_inf": 0.8356,
+      "F_meas": 0.78,
+      "collision": 1.37,
+      "n_cx": 33,
+      "n_1q": 84,
+      "shots": 2048
+    },
+    {
+      "depth": 8,
+      "F_inf": 0.8126,
+      "F_meas": 0.5747,
+      "collision": 1.77,
+      "n_cx": 45,
+      "n_1q": 108,
+      "shots": 2048
+    },
+    {
+      "depth": 10,
+      "F_inf": 0.796,
+      "F_meas": 0.61,
+      "collision": 2.31,
+      "n_cx": 53,
+      "n_1q": 132,
+      "shots": 2048
+    },
+    {
+      "depth": 11,
+      "F_inf": 0.7865,
+      "F_meas": 0.5575,
+      "collision": 2.33,
+      "n_cx": 58,
+      "n_1q": 144,
+      "shots": 2048
+    },
+    {
+      "depth": 12,
+      "F_inf": 0.7741,
+      "F_meas": 0.3967,
+      "collision": 3.41,
+      "n_cx": 65,
+      "n_1q": 156,
+      "shots": 2048
+    },
+    {
+      "depth": 13,
+      "F_inf": 0.7648,
+      "F_meas": 0.4527,
+      "collision": 1.91,
+      "n_cx": 70,
+      "n_1q": 168,
+      "shots": 2048
+    },
+    {
+      "depth": 14,
+      "F_inf": 0.7598,
+      "F_meas": 0.3162,
+      "collision": 2.28,
+      "n_cx": 72,
+      "n_1q": 180,
+      "shots": 2048
+    },
+    {
+      "depth": 16,
+      "F_inf": 0.728,
+      "F_meas": 0.3156,
+      "collision": 2.04,
+      "n_cx": 92,
+      "n_1q": 204,
+      "shots": 2048
+    },
+    {
+      "depth": 18,
+      "F_inf": 0.7159,
+      "F_meas": 0.422,
+      "collision": 2.42,
+      "n_cx": 98,
+      "n_1q": 228,
+      "shots": 2048
+    }
+  ]
+}

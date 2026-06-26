@@ -1,0 +1,155 @@
+{
+  "corpus": {
+    "n_certified_total": 2517,
+    "n_selection": 1259,
+    "n_validation": 1258,
+    "overall_route_accuracy": 0.9956,
+    "n_errors_total": 11
+  },
+  "split": "deterministic 50/50 (rows[0::2] selection, rows[1::2] validation) \u2014 shared with atlas_conformal",
+  "brier_held_out": {
+    "raw_heuristic": 0.10327,
+    "platt": 0.00782,
+    "isotonic": 0.00758
+  },
+  "ece_held_out": {
+    "raw_heuristic": 0.255,
+    "isotonic": 0.0069
+  },
+  "reliability_raw": [
+    {
+      "bin_lo": 0.1,
+      "bin_hi": 0.2,
+      "n": 46,
+      "pred_mean": 0.18,
+      "obs_acc": 0.8478,
+      "wilson_lo": 0.7178,
+      "wilson_hi": 0.9243
+    },
+    {
+      "bin_lo": 0.3,
+      "bin_hi": 0.4,
+      "n": 77,
+      "pred_mean": 0.3592,
+      "obs_acc": 0.961,
+      "wilson_lo": 0.8916,
+      "wilson_hi": 0.9867
+    },
+    {
+      "bin_lo": 0.4,
+      "bin_hi": 0.5,
+      "n": 145,
+      "pred_mean": 0.4701,
+      "obs_acc": 1.0,
+      "wilson_lo": 0.9742,
+      "wilson_hi": 1.0
+    },
+    {
+      "bin_lo": 0.5,
+      "bin_hi": 0.6,
+      "n": 2,
+      "pred_mean": 0.54,
+      "obs_acc": 1.0,
+      "wilson_lo": 0.3424,
+      "wilson_hi": 1.0
+    },
+    {
+      "bin_lo": 0.7,
+      "bin_hi": 0.8,
+      "n": 368,
+      "pred_mean": 0.78,
+      "obs_acc": 1.0,
+      "wilson_lo": 0.9897,
+      "wilson_hi": 1.0
+    },
+    {
+      "bin_lo": 0.8,
+      "bin_hi": 0.9,
+      "n": 515,
+      "pred_mean": 0.839,
+      "obs_acc": 1.0,
+      "wilson_lo": 0.9926,
+      "wilson_hi": 1.0
+    },
+    {
+      "bin_lo": 0.9,
+      "bin_hi": 1.0,
+      "n": 105,
+      "pred_mean": 0.98,
+      "obs_acc": 1.0,
+      "wilson_lo": 0.9647,
+      "wilson_hi": 1.0
+    }
+  ],
+  "reliability_isotonic": [
+    {
+      "bin_lo": 0.9,
+      "bin_hi": 1.0,
+      "n": 1258,
+      "pred_mean": 0.999,
+      "obs_acc": 0.9921,
+      "wilson_lo": 0.9854,
+      "wilson_hi": 0.9957
+    }
+  ],
+  "isotonic_map": [
+    {
+      "conf_score": 10,
+      "p_correct": 0.9756
+    },
+    {
+      "conf_score": 18,
+      "p_correct": 0.9756
+    },
+    {
+      "conf_score": 30,
+      "p_correct": 0.9756
+    },
+    {
+      "conf_score": 34,
+      "p_correct": 0.9756
+    },
+    {
+      "conf_score": 45,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 60,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 75,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 80,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 88,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 95,
+      "p_correct": 1.0
+    },
+    {
+      "conf_score": 100,
+      "p_correct": 1.0
+    }
+  ],
+  "conformal_selective_threshold": {
+    "tau": 18.0,
+    "val_coverage": 1.0,
+    "val_err_ub": 0.013252883696138784,
+    "guaranteed_correctness": 0.9867471163038612,
+    "passes": true,
+    "alpha": 0.05,
+    "n_val_accepted": 1258
+  },
+  "caveats": [
+    "All 11 errors in the full corpus sit at raw confidence_score <= 34; above that, 0/2517.",
+    "Low-confidence bins contain few errors -> wide Wilson CIs (reported per-bin).",
+    "Calibrated on classically-CERTIFIABLE circuits; the quantum-hard regime (n>24, no classical oracle) is unmeasurable by construction and excluded."
+  ]
+}

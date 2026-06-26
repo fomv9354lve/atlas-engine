@@ -1,0 +1,14 @@
+{
+  "perceived_frac": 0.32,
+  "field_frac": 0.42,
+  "nucleo_frac": 1.0,
+  "reclaimed_pct": 86.1,
+  "counts": {
+    "total": 812,
+    "escalate": 12,
+    "hpc": 16,
+    "perceived_hard": 144,
+    "reclaimed": 124
+  },
+  "note": "fracs are positions on the easy->n\u00facleo diagonal; data-driven from the benchmark + large-n extension"
+}

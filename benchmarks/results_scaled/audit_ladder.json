@@ -1,0 +1,243 @@
+{
+  "ladder": [
+    {
+      "iter": 1,
+      "desc": "Baseline Clifford+T low-entanglement n=8",
+      "n": 8,
+      "route": "CPU",
+      "correct_routes": [
+        "CPU",
+        "TENSOR"
+      ],
+      "governing": "Pauli spread",
+      "mps_bond_log2": 1.0,
+      "mps_truncated": false,
+      "treewidth_log2": 8.0,
+      "treewidth_exact": false,
+      "spread_log2": 1.0,
+      "spread_state": "computed 2^1",
+      "magic_T": 15,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "baseline",
+      "verdict": "OK"
+    },
+    {
+      "iter": 2,
+      "desc": "High-T low-entanglement n=12 (disjoint CX)",
+      "n": 12,
+      "route": "CPU",
+      "correct_routes": [
+        "CPU",
+        "TENSOR"
+      ],
+      "governing": "MPS",
+      "mps_bond_log2": 1.0,
+      "mps_truncated": false,
+      "treewidth_log2": 12.0,
+      "treewidth_exact": false,
+      "spread_log2": 2.0,
+      "spread_state": "computed 2^2",
+      "magic_T": 134,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "high-T -> NO escalar por magia",
+      "verdict": "OK"
+    },
+    {
+      "iter": 3,
+      "desc": "1D brickwork profundo n=24, T distribuida",
+      "n": 24,
+      "route": "TENSOR",
+      "correct_routes": [
+        "CPU",
+        "HPC_FIRST",
+        "TENSOR"
+      ],
+      "governing": "statevector",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 25.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 186,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "MPS debe reportar bond/truncaci\u00f3n",
+      "verdict": "OK"
+    },
+    {
+      "iter": 4,
+      "desc": "Deep chain adversarial n=40, bajo bond final",
+      "n": 40,
+      "route": "HPC_FIRST",
+      "correct_routes": [
+        "CPU",
+        "HPC_FIRST",
+        "TENSOR"
+      ],
+      "governing": "treewidth",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 40.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 162,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "NO escalar por n/treewidth bruto",
+      "verdict": "OK"
+    },
+    {
+      "iter": 5,
+      "desc": "Grid 5x5 moderado n=25",
+      "n": 25,
+      "route": "TENSOR",
+      "correct_routes": [
+        "HPC_FIRST",
+        "TENSOR"
+      ],
+      "governing": "statevector",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 25.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 57,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "salir de CPU-simple salvo bond bajo medido",
+      "verdict": "OK"
+    },
+    {
+      "iter": 6,
+      "desc": "Grid 6x6 denso n=36",
+      "n": 36,
+      "route": "ESCALATE",
+      "correct_routes": [
+        "ESCALATE",
+        "HPC_FIRST"
+      ],
+      "governing": "treewidth",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 81.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 147,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "MPS truncado != TRACTABLE",
+      "verdict": "OK"
+    },
+    {
+      "iter": 7,
+      "desc": "Clifford-only grande n=96 (#T=0)",
+      "n": 96,
+      "route": "CPU",
+      "correct_routes": [
+        "CPU",
+        "TENSOR"
+      ],
+      "governing": "Stim stabilizer",
+      "mps_bond_log2": 3.0,
+      "mps_truncated": false,
+      "treewidth_log2": 96.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 0,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "#T=0 -> Stim, NO escalar por n",
+      "verdict": "OK"
+    },
+    {
+      "iter": 8,
+      "desc": "Mostly-Clifford n=80, T escasas locales",
+      "n": 80,
+      "route": "CPU",
+      "correct_routes": [
+        "CPU",
+        "HPC_FIRST",
+        "TENSOR"
+      ],
+      "governing": "MPS",
+      "mps_bond_log2": 4.0,
+      "mps_truncated": false,
+      "treewidth_log2": 80.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 35,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "spread de T debe medirse",
+      "verdict": "OK"
+    },
+    {
+      "iter": 9,
+      "desc": "Random 2D supremacy-like 7x7 n=49",
+      "n": 49,
+      "route": "ESCALATE",
+      "correct_routes": [
+        "ESCALATE",
+        "HPC_FIRST"
+      ],
+      "governing": "treewidth",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 105.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 580,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "no 'tractable' sin runtime medido",
+      "verdict": "OK"
+    },
+    {
+      "iter": 10,
+      "desc": "QPU-candidate heavy-hex n=110",
+      "n": 110,
+      "route": "ESCALATE",
+      "correct_routes": [
+        "ESCALATE",
+        "HPC_FIRST"
+      ],
+      "governing": "treewidth",
+      "mps_bond_log2": 6.0,
+      "mps_truncated": true,
+      "treewidth_log2": 110.0,
+      "treewidth_exact": false,
+      "spread_log2": null,
+      "spread_state": "fast-path(n>14)",
+      "magic_T": 1149,
+      "route_ok": true,
+      "false_alarm": false,
+      "false_security": false,
+      "risk_axis": "no 'ventaja'; 'no certified classical route'",
+      "verdict": "OK"
+    }
+  ],
+  "summary": {
+    "route_ok": 10,
+    "n": 10,
+    "false_alarms": 0,
+    "false_securities": 0
+  }
+}

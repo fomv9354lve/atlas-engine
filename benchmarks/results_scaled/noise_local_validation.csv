@@ -1,0 +1,7 @@
+circuit,n,n2q_layers,atlas_route,tvd_ideal_vs_noisy_local,classical_reproduces_device,ideal_nontriviality_vs_uniform,noisy_nontriviality_vs_uniform,noise_collapse_delta,treewidth_log2,mps_log2
+ghz4,4,3,CPU,0.0371,SI,0.875,0.8379,0.0371,4.0,1.0
+cliffordT5,5,4,CPU,0.0286,SI,0.0,0.0286,-0.0286,5.0,0.0
+brick8d2,8,3,CPU,0.1028,SI,0.0,0.1028,-0.1028,8.0,1.0
+brick8d6,8,11,CPU,0.1038,SI,0.0,0.1038,-0.1038,11.0,3.0
+brick8d12,8,22,CPU,0.1021,SI,0.0,0.1021,-0.1021,14.0,3.0
+magic6,6,15,CPU,0.0422,SI,0.0,0.0422,-0.0422,6.0,2.0

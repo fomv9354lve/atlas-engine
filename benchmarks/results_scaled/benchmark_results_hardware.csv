@@ -1,0 +1,5 @@
+circuit,n,backend,shots,tvd_ideal_vs_qpu,wall_s,usage,atlas_route
+ghz4,4,ibm_kingston,1024,0.0586,15592.1,2,CPU
+cliffordT5,5,ibm_kingston,1024,0.0547,197.4,2,CPU
+ghz4_embed_GOOD,4,ibm_kingston,1024,0.064,,,"CPU(layout[0,1,2,3])"
+ghz4_embed_TLS,4,ibm_kingston,1024,0.465,,,"CPU(layout[120,121,122,123]-TLS)"

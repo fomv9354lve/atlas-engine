@@ -1,0 +1,34 @@
+{
+  "what": "Shannon transported-information of Atlas triage (additive measurement, not a verdict change)",
+  "corpus": {
+    "verdict_level_n": 2517,
+    "estimator_ablation_n": 800
+  },
+  "units": "bits (log2)",
+  "prior_uncertainty_H_route_bits": 0.2452,
+  "verdict_transported_information_bits": 0.2045,
+  "efficiency_fraction_of_route_uncertainty_resolved": 0.8342,
+  "residual_uncertainty_after_verdict_bits": 0.0406,
+  "per_estimator_information_bits": {
+    "magic_only (#T)": 0.1072,
+    "mps_only (bond)": 0.1917,
+    "treewidth_only": 0.1223
+  },
+  "best_single_estimator_bits": 0.1917,
+  "joint_multi_estimator_bits": 0.305,
+  "synergy_bits_gained_by_combining": 0.1133,
+  "final_adjudicator_bits_800": 0.3965,
+  "confidence_increment_bits": 0.015,
+  "H_route_800_bits": 0.4689,
+  "interpretation": {
+    "feynman": "validated against real data (oracle ground truth + ibm_kingston), not predicted",
+    "shannon": "I(route; verdict) is the channel's transported information; a LOWER bound on capacity",
+    "turing": "residual uncertainty is where MEDIUM correctly says 'oracle (QPU) needed'",
+    "leone_2602.22330": "exact decision is super-exponential -> channel noise is irreducible; we measure how much signal passes, not claim a perfect channel"
+  },
+  "caveats": [
+    "Achieved mutual information on the benchmark distribution = LOWER bound on channel capacity (capacity is a sup over input distributions); we never claim to have reached capacity.",
+    "Plug-in entropies with Miller-Madow correction; small route alphabet so bias is minor but nonzero.",
+    "Ablation single-only classes exist on the 800-row stratified set; verdict-level MI uses all 2517."
+  ]
+}
