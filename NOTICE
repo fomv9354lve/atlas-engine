@@ -8,3 +8,29 @@ You may obtain a copy of the License at
     http://www.apache.org/licenses/LICENSE-2.0
 
 This product was created and is authored by Fco. Osvaldo Morales Vilchis.
+
+--------------------------------------------------------------------------------
+Third-party components
+--------------------------------------------------------------------------------
+
+Three.js (MIT) — Copyright © 2010-2026 three.js authors.
+  Bundled under engine/vendor/three-r128/. See engine/vendor/three-r128/LICENSE
+  for the full MIT license text.
+
+--------------------------------------------------------------------------------
+IBM Quantum device data — carve-out
+--------------------------------------------------------------------------------
+
+IBM Quantum device data republished here (job IDs, calibration snapshots, and
+measured results — e.g. benchmarks/qpu_jobs.json, benchmarks/kingston_calibration.json,
+and figures derived from ibm_kingston runs) is IBM's data, used under IBM Quantum's
+terms of service. It is NOT licensed under Apache-2.0. Only Atlas's own code,
+benchmark corpus, and reproduce scripts are released under Apache-2.0.
+
+--------------------------------------------------------------------------------
+Trademarks / no affiliation
+--------------------------------------------------------------------------------
+
+Atlas is a Krenn·IQ project. Not affiliated with, endorsed by, or sponsored by
+IBM, IonQ, Rigetti, IQM, AWS, or any quantum-hardware vendor. All third-party
+names and marks are property of their respective owners.

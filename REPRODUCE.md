@@ -2,7 +2,9 @@
 
 Atlas's claim is "publish in a form you can check." This file maps **every public number**
 on [atlas.krenniq.com](https://atlas.krenniq.com) to the exact data file and script that
-produces it. Everything here is Apache 2.0. No account, no quota — it runs on your machine.
+produces it. Atlas's own code, corpus and scripts are Apache 2.0. (IBM Quantum device data — job
+IDs, calibration, results — is IBM's data, used under IBM Quantum's terms; it is NOT covered by
+Apache-2.0. See `NOTICE`.) No account, no quota — it runs on your machine.
 
 ```bash
 python3 -m pip install -r requirements.txt   # numpy, stim, quimb, cotengra, qiskit

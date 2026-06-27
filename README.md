@@ -25,8 +25,8 @@ See **[QUICKSTART.md](QUICKSTART.md)** for details.
 ## Check the numbers
 
 Every public figure on the site maps to a data file + a script in **[REPRODUCE.md](REPRODUCE.md)**.
-The headline benchmark (2,517 oracle-certified circuits, route-correctness 0.996) reproduces
-standalone:
+The headline benchmark (2,517 oracle-certified circuits, self-consistency vs. an exact
+same-formalism oracle = 0.996 — not "route correctness") reproduces standalone:
 
 ```bash
 python3 engine/atlas_benchmark_bundle.py  # corpus SHA + confusion matrix + metric definition
@@ -43,5 +43,21 @@ side of it a circuit is on. Borderline-zone verdicts are flagged as such. The be
 **self-consistency vs. an exact same-formalism oracle**; the genuinely-hard (escalate) regime is
 **unmeasured** — there is no classical ground truth there.
 
-The scalable engine (Stim / quimb / cotengra + route adjudication + UI) is here and open. The
-proprietary research arsenal (the n≤14 fold/spread engine) is not part of this release.
+## What is open — and what isn't
+
+**Open (Apache-2.0, in this repo):** the scalable engine (Stim / quimb / cotengra + the route
+adjudicator + UI), the benchmark corpus (2,517 oracle-certified circuits), the reproduce scripts,
+and the measured QPU result JSONs. Clone it and re-derive every number.
+
+**Not open (proprietary):** the research arsenal (the n≤14 fold/spread engine) and the confidence
+model trained on top of it. That is the moat — not the data. "Open engine" here does not mean the
+entire system is released.
+
+(IBM Quantum device data — job IDs, calibration, results — is IBM's data, used under IBM Quantum's
+terms; it is NOT covered by Apache-2.0. See `NOTICE`.)
+
+## Trademarks / no affiliation
+
+Atlas is a Krenn·IQ project. Not affiliated with, endorsed by, or sponsored by IBM, IonQ, Rigetti,
+IQM, AWS, or any quantum-hardware vendor. All third-party names and marks are property of their
+respective owners.
