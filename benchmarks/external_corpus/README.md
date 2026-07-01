@@ -51,7 +51,7 @@ The honest meaning is that methods the field assumed were QPU-only (large tensor
 ## Sources of the circuits
 
 - **Sycamore random circuit sampling (RCS)** — the 2019 "quantum supremacy" family.
-  Arute et al., *Nature* 573, 505 (2019). Later classically reproduced post-hoc:
+  Arute et al., *Nature* 574, 505 (2019). Later classically reproduced post-hoc:
   Pan & Zhang, *PRL* 129, 090502 (2022); Liu et al., Gordon Bell 2021. Atlas escalates
   it (correct — genuinely high-treewidth at depth).
 - **IBM 127-qubit "utility" kicked-Ising** — Kim et al., *Nature* 618, 500 (2023).
