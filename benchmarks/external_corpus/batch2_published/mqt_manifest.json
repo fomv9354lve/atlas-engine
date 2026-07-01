@@ -1,0 +1,224 @@
+[
+  {
+    "tag": "mqt_ae_n12",
+    "bench": "ae",
+    "req_size": 12,
+    "ok": false,
+    "error": "TypeError: only 0-dimensional arrays can be converted to Python scalars"
+  },
+  {
+    "tag": "mqt_ae_n18",
+    "bench": "ae",
+    "req_size": 18,
+    "ok": false,
+    "error": "TypeError: only 0-dimensional arrays can be converted to Python scalars"
+  },
+  {
+    "tag": "mqt_grover_n8",
+    "bench": "grover",
+    "req_size": 8,
+    "n": 8,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_grover_n8.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_grover_n12",
+    "bench": "grover",
+    "req_size": 12,
+    "n": 12,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_grover_n12.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qpeexact_n10",
+    "bench": "qpeexact",
+    "req_size": 10,
+    "n": 10,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qpeexact_n10.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qpeexact_n16",
+    "bench": "qpeexact",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qpeexact_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qpeinexact_n14",
+    "bench": "qpeinexact",
+    "req_size": 14,
+    "n": 14,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qpeinexact_n14.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qaoa_n12",
+    "bench": "qaoa",
+    "req_size": 12,
+    "n": 12,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qaoa_n12.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qftentangled_n20",
+    "bench": "qftentangled",
+    "req_size": 20,
+    "n": 20,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qftentangled_n20.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qftentangled_n40",
+    "bench": "qftentangled",
+    "req_size": 40,
+    "n": 40,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qftentangled_n40.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qwalk_n12",
+    "bench": "qwalk",
+    "req_size": 12,
+    "n": 12,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qwalk_n12.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_graphstate_n30",
+    "bench": "graphstate",
+    "req_size": 30,
+    "n": 30,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_graphstate_n30.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_graphstate_n60",
+    "bench": "graphstate",
+    "req_size": 60,
+    "n": 60,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_graphstate_n60.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_dj_n40",
+    "bench": "dj",
+    "req_size": 40,
+    "n": 40,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_dj_n40.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_dj_n80",
+    "bench": "dj",
+    "req_size": 80,
+    "n": 80,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_dj_n80.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_vqe_su2_n12",
+    "bench": "vqe_su2",
+    "req_size": 12,
+    "n": 12,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_vqe_su2_n12.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_vqe_real_amp_n14",
+    "bench": "vqe_real_amp",
+    "req_size": 14,
+    "n": 14,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_vqe_real_amp_n14.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_vqe_two_local_n16",
+    "bench": "vqe_two_local",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_vqe_two_local_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qnn_n12",
+    "bench": "qnn",
+    "req_size": 12,
+    "n": 12,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qnn_n12.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_wstate_n50",
+    "bench": "wstate",
+    "req_size": 50,
+    "n": 50,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_wstate_n50.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_randomcircuit_n16",
+    "bench": "randomcircuit",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_randomcircuit_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_randomcircuit_n24",
+    "bench": "randomcircuit",
+    "req_size": 24,
+    "n": 24,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_randomcircuit_n24.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_cdkm_ripple_carry_adder_n18",
+    "bench": "cdkm_ripple_carry_adder",
+    "req_size": 18,
+    "n": 18,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_cdkm_ripple_carry_adder_n18.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_draper_qft_adder_n16",
+    "bench": "draper_qft_adder",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_draper_qft_adder_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_modular_adder_n16",
+    "bench": "modular_adder",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_modular_adder_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_multiplier_n16",
+    "bench": "multiplier",
+    "req_size": 16,
+    "n": 16,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_multiplier_n16.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_shor_n18",
+    "bench": "shor",
+    "req_size": 18,
+    "n": 18,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_shor_n18.qasm",
+    "ok": true
+  },
+  {
+    "tag": "mqt_qwalk_n20",
+    "bench": "qwalk",
+    "req_size": 20,
+    "n": 20,
+    "file": "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/qasm/mqt_qwalk_n20.qasm",
+    "ok": true
+  }
+]
