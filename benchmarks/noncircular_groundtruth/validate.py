@@ -14,7 +14,7 @@ from __future__ import annotations
 import os, sys, json, subprocess, re, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-BASE = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex"
+BASE = "."
 VENV = os.path.join(BASE, ".atlas-venv/bin/python")
 HERE = os.path.join(BASE, "benchmarks/noncircular_groundtruth")
 ATLAS_WORKER = os.path.join(BASE, "benchmarks/external_corpus/worker.py")

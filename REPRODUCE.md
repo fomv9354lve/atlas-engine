@@ -44,7 +44,7 @@ else is offline and deterministic.
   ```bash
   QISKIT_IBM_TOKEN=<your-token> QPU_SUBMIT=1 python3 benchmarks/qpu_validation.py
   ```
-- Result: TVD(ideal, QPU) ≈ 0.059 / 0.055 (GHZ-4, Clifford+T-5); mirror-RB per-layer fidelity
+- Result: TVD(ideal, QPU) ≈ 0.059 / 0.055 (GHZ-4, Clifford+T-5); mirror-RB per-layer error rate (r_per_layer)
   6.7 %–11.2 % readout-corrected. **Scope:** one device (`ibm_kingston`), dates 2026-06-22/24.
   An IBM job-id alone is not third-party fetchable — the result JSONs above are what make it checkable.
 

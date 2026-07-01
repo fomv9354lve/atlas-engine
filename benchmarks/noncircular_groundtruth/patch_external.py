@@ -7,7 +7,7 @@ understands rxx/ryy/rzz). Self-generated circuits are pure {h,s,t,cx} by constru
 from __future__ import annotations
 import os, json, subprocess, time
 
-BASE = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex"
+BASE = "."
 VENV = os.path.join(BASE, ".atlas-venv/bin/python")
 HERE = os.path.join(BASE, "benchmarks/noncircular_groundtruth")
 SV_WORKER = os.path.join(HERE, "sv_worker.py")
