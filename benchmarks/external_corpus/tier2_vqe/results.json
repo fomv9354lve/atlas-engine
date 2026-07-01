@@ -54,8 +54,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 13.31,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 12.45,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_linear_n12_d3",
@@ -86,8 +87,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.06,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 12.78,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_linear_n16_d4",
@@ -118,8 +120,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.11,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 12.01,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_linear_n20_d4",
@@ -150,8 +153,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.13,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 12.94,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_linear_n12_d8",
@@ -182,8 +186,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.16,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 13.59,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 50
     },
     {
       "name": "hea_full_n8_d3",
@@ -214,8 +219,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 1.03,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 14.48,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_full_n12_d3",
@@ -246,8 +252,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.53,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 14.51,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_full_n16_d3",
@@ -278,8 +285,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 1.42,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 17.58,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "hea_full_n20_d2",
@@ -310,8 +318,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 1.28,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 17.55,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "uccsd_h2_n4",
@@ -342,8 +351,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.61,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 14.87,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "uccsd_lih_n12",
@@ -374,8 +384,9 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.09,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 15.12,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     },
     {
       "name": "uccsd_beh2_n14",
@@ -406,11 +417,13 @@
       },
       "classical_tier": true,
       "n_parse_warnings": 0,
-      "elapsed_s": 0.19,
-      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit"
+      "elapsed_s": 15.31,
+      "note": "representative VQE/chemistry workload, commonly presented as a QC use-case; parametric (random angles), not a specific vendor's exact circuit",
+      "confidence_score": 88
     }
   ],
   "engine": "atlas-codex/HANDOFF_5ideas safe_parse + cost_atlas + route_adjudicator (REAL)",
   "circuit_provenance": "All circuits are PARAMETRIC and constructed to be representative of published VQE / quantum-chemistry workloads (hardware-efficient ansaetze and UCCSD-style excitation circuits). They are NOT a specific paper's exact transpiled circuit. Routing depends on circuit STRUCTURE (entanglement / treewidth / T-magic), which is preserved regardless of the random angles used.",
-  "note": "Offline research harness. Web n-cap bypassed (cost_atlas called directly); live cap untouched; nothing deployed. Outputs only under benchmarks/external_corpus/tier2_vqe/."
+  "note": "Offline research harness. Web n-cap bypassed (cost_atlas called directly); live cap untouched; nothing deployed. Outputs only under benchmarks/external_corpus/tier2_vqe/.",
+  "rerun_note": "Re-run 2026-06-30 through FIXED engine (per-estimator ATLAS_EST_BUDGET_S=15 budgets; graceful abstain). Previous per-estimator small-n HANGS (engine bug) resolved; those were an engine limitation, NOT circuit hardness. Wall cap 240s/circuit."
 }

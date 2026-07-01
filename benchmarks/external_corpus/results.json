@@ -1,16 +1,16 @@
 {
   "summary": {
     "total_circuits": 18,
-    "ran_ok": 17,
-    "failed_or_timeout": 1,
-    "routed_classical_tier": 14,
+    "ran_ok": 18,
+    "failed_or_timeout": 0,
+    "routed_classical_tier": 15,
     "routed_escalate": 3,
     "field_assumed_qpu_circuits": 3,
     "field_assumed_qpu_routed_classical": 0,
     "tier_breakdown": {
       "CPU": 13,
       "TENSOR": 0,
-      "HPC_FIRST": 1,
+      "HPC_FIRST": 2,
       "ESCALATE": 3
     }
   },
@@ -19,26 +19,26 @@
       "n": 32,
       "t_count": 9248,
       "magic_log2": 3664.06,
-      "mps_bond_log2": 6.0,
+      "mps_bond_log2": null,
       "mps_truncated": true,
-      "treewidth_log2": 68.0,
+      "treewidth_log2": null,
       "treewidth_exact": false,
       "stim_clifford": false,
-      "best_method": "MPS(entangle)",
-      "union_cost_log2": 6.0,
-      "verdict": "TRACTABLE via exact statevector (2^32 ~ 68.7 GB); MPS truncado y treewidth 2^68.0 no certifican, pero statevector si (n<=33)",
+      "best_method": "fold(magic)",
+      "union_cost_log2": 3664.06,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
       "route": "HPC_FIRST",
       "governing_estimator": "statevector",
       "governing_cost_log2": 32.0,
-      "confidence": "medium",
-      "confidence_score": 49,
+      "confidence": "low",
+      "confidence_score": 43,
       "single_estimator_baselines": {
         "treewidth_only": "ESCALATE",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 455.85,
+      "elapsed_s": 36.23,
       "name": "QV_n32",
       "status": "ok",
       "source": "QASMBench (Li et al., ACM TQC 2023); Quantum Volume protocol, Cross et al., PRA 100, 032328 (2019)",
@@ -71,7 +71,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 34.35,
+      "elapsed_s": 13.78,
       "name": "qft_n29",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); Quantum Fourier Transform",
@@ -104,7 +104,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 211.68,
+      "elapsed_s": 43.28,
       "name": "qft_n63",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); Quantum Fourier Transform, 63q",
@@ -112,7 +112,9 @@
       "classically_simulated_by": "QFT low treewidth; TN-tractable",
       "kind": "hard-labeled-benchmark",
       "classical_tier": true,
-      "consistent_with_classical_reachability": true
+      "consistent_with_classical_reachability": true,
+      "est_budget_s_used": 240,
+      "budget_note": "MPS estimator is exact (bond 2^0, low-entanglement/TN-tractable) but slow to certify; needed a larger per-estimator budget than the corpus default 15s. Classical route is real, not budget-induced ESCALATE."
     },
     {
       "n": 34,
@@ -137,7 +139,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 48.21,
+      "elapsed_s": 11.24,
       "name": "ising_n34",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); Ising-model dynamics",
@@ -170,7 +172,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 27.98,
+      "elapsed_s": 11.72,
       "name": "ising_n66",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); Ising-model dynamics, 66q",
@@ -203,7 +205,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 23.91,
+      "elapsed_s": 12.05,
       "name": "adder_n28",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); reversible ripple-carry adder",
@@ -236,7 +238,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 41.66,
+      "elapsed_s": 16.75,
       "name": "multiplier_n45",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); reversible multiplier, 45q",
@@ -269,7 +271,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.25,
+      "elapsed_s": 12.47,
       "name": "ghz_n127",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); 127q GHZ state",
@@ -302,7 +304,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 22.73,
+      "elapsed_s": 11.86,
       "name": "cat_n65",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); 65q cat state",
@@ -335,7 +337,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 26.31,
+      "elapsed_s": 12.82,
       "name": "bv_n70",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); Bernstein-Vazirani, 70q",
@@ -347,12 +349,35 @@
     },
     {
       "name": "vqe_uccsd_n28",
-      "status": "TIMEOUT",
-      "timeout_s": 600,
+      "status": "ok",
       "source": "QASMBench (Li et al. 2023); VQE UCCSD chemistry ansatz, 28q",
       "field_claim": "chemistry-ansatz benchmark",
       "classically_simulated_by": "statevector at n=28 (~4 GB) is classically feasible",
-      "kind": "hard-labeled-benchmark"
+      "kind": "hard-labeled-benchmark",
+      "n": 28,
+      "t_count": 11484,
+      "magic_log2": 4549.96,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 4549.96,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "route": "HPC_FIRST",
+      "governing_estimator": "statevector",
+      "governing_cost_log2": 28.0,
+      "confidence": "low",
+      "confidence_score": 43,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 39.25,
+      "classical_tier": true
     },
     {
       "n": 39,
@@ -377,7 +402,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 17.76,
+      "elapsed_s": 14.11,
       "name": "qugan_n39",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); quantum GAN, 39q",
@@ -410,7 +435,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 16.3,
+      "elapsed_s": 12.15,
       "name": "knn_n31",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); quantum kNN, 31q",
@@ -443,7 +468,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 20.08,
+      "elapsed_s": 13.3,
       "name": "dnn_n33",
       "status": "ok",
       "source": "QASMBench (Li et al. 2023); quantum DNN, 33q",
@@ -457,14 +482,14 @@
       "n": 127,
       "t_count": 635,
       "magic_log2": 251.59,
-      "mps_bond_log2": 6.0,
+      "mps_bond_log2": null,
       "mps_truncated": true,
       "treewidth_log2": 127.0,
       "treewidth_exact": false,
       "stim_clifford": false,
-      "best_method": "MPS(entangle)",
-      "union_cost_log2": 6.0,
-      "verdict": "INTRACTABLE (probable): MPS truncado (>=2^6.0, sin ruta confirmada), treewidth 2^127.0 y statevector 2^127 > presupuesto/ceiling",
+      "best_method": "contraction(treewidth)",
+      "union_cost_log2": 127.0,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
       "route": "ESCALATE",
       "governing_estimator": "treewidth",
       "governing_cost_log2": 127.0,
@@ -472,11 +497,11 @@
       "confidence_score": 42,
       "single_estimator_baselines": {
         "treewidth_only": "ESCALATE",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 61.46,
+      "elapsed_s": 22.58,
       "name": "kicked_ising_127q_hard_5steps",
       "status": "ok",
       "source": "Kim et al., Nature 618, 500 (2023) (127q Eagle kicked TFIM; non-Clifford Rx angle = genuine hard regime, theta_J=-pi/2, phi=0.9 rad)",
@@ -490,7 +515,7 @@
       "n": 127,
       "t_count": 0,
       "magic_log2": 0.0,
-      "mps_bond_log2": 6.0,
+      "mps_bond_log2": null,
       "mps_truncated": true,
       "treewidth_log2": 127.0,
       "treewidth_exact": false,
@@ -505,11 +530,11 @@
       "confidence_score": 54,
       "single_estimator_baselines": {
         "treewidth_only": "ESCALATE",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 52.91,
+      "elapsed_s": 21.71,
       "name": "kicked_ising_127q_clifford_point",
       "status": "ok",
       "source": "Kim et al., Nature 618, 500 (2023), evaluated at the exactly-SOLVABLE Clifford point (theta_J=-pi/2, phi=pi/2)",
@@ -542,7 +567,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 25.95,
+      "elapsed_s": 15.04,
       "name": "sycamore_rcs_53q_depth8",
       "status": "ok",
       "source": "Sycamore-scale RCS (Arute et al., Nature 574, 505 (2019) methodology) via cirq supremacy generator; shallow depth 8",
@@ -556,14 +581,14 @@
       "n": 53,
       "t_count": 704,
       "magic_log2": 278.92,
-      "mps_bond_log2": 6.0,
+      "mps_bond_log2": null,
       "mps_truncated": true,
       "treewidth_log2": 93.0,
       "treewidth_exact": false,
       "stim_clifford": false,
-      "best_method": "MPS(entangle)",
-      "union_cost_log2": 6.0,
-      "verdict": "INTRACTABLE (probable): MPS truncado (>=2^6.0, sin ruta confirmada), treewidth 2^93.0 y statevector 2^53 > presupuesto/ceiling",
+      "best_method": "contraction(treewidth)",
+      "union_cost_log2": 93.0,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
       "route": "ESCALATE",
       "governing_estimator": "treewidth",
       "governing_cost_log2": 93.0,
@@ -571,11 +596,11 @@
       "confidence_score": 42,
       "single_estimator_baselines": {
         "treewidth_only": "ESCALATE",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 30.27,
+      "elapsed_s": 21.18,
       "name": "sycamore_rcs_53q_depth20",
       "status": "ok",
       "source": "Sycamore-scale RCS (Arute et al. 2019 methodology) via cirq supremacy generator; supremacy-depth 20",
@@ -608,5 +633,6 @@
       "truncated": true
     }
   ],
-  "kicked_ising_20steps_note": "Trotter depth 20 at the Clifford point did not build the quimb tensor network on this machine (process killed / >900s) -> reported as not-run, not fabricated."
+  "kicked_ising_20steps_note": "Trotter depth 20 at the Clifford point did not build the quimb tensor network on this machine (process killed / >900s) -> reported as not-run, not fabricated.",
+  "rerun_note": "Re-run 2026-06-30 through FIXED engine (per-estimator ATLAS_EST_BUDGET_S=15 budgets; graceful abstain). Previous per-estimator small-n HANGS (engine bug) resolved; those were an engine limitation, NOT circuit hardness. Wall cap 240s/circuit."
 }

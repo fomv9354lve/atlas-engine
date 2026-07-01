@@ -6,15 +6,15 @@
       "MQT Bench": 26
     },
     "route_distribution": {
-      "CPU": 56,
-      "TENSOR": 1,
+      "CPU": 63,
+      "TENSOR": 2,
       "HPC_FIRST": 0,
-      "ESCALATE": 0,
-      "TIMEOUT": 12
+      "ESCALATE": 4,
+      "TIMEOUT": 0
     },
     "errors": [],
     "n_errors": 0,
-    "per_circuit_timeout_s": 300
+    "per_circuit_timeout_s": 240
   },
   "results": [
     {
@@ -40,7 +40,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 16.06,
+      "elapsed_s": 9.79,
       "status": "ok",
       "name": "qb_adder_n10",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/adder_n10/adder_n10.qasm",
@@ -49,13 +49,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "qb_hhl_n10",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/hhl_n10/hhl_n10.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 10,
+      "t_count": 92144,
+      "magic_log2": 36507.45,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 36507.45,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 10.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 34.84
     },
     {
       "n": 10,
@@ -80,7 +100,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 17.78,
+      "elapsed_s": 7.11,
       "status": "ok",
       "name": "qb_ising_n10",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/ising_n10/ising_n10.qasm",
@@ -110,7 +130,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 17.26,
+      "elapsed_s": 7.06,
       "status": "ok",
       "name": "qb_qpe_n9",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/qpe_n9/qpe_n9.qasm",
@@ -140,7 +160,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 18.58,
+      "elapsed_s": 7.39,
       "status": "ok",
       "name": "qb_sat_n7",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/sat_n7/sat_n7.qasm",
@@ -170,7 +190,7 @@
         "magic_only": "TENSOR"
       },
       "n_parse_warnings": 4,
-      "elapsed_s": 19.01,
+      "elapsed_s": 8.42,
       "status": "ok",
       "name": "qb_shor_n5",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/shor_n5/shor_n5.qasm",
@@ -200,7 +220,7 @@
         "magic_only": "TENSOR"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.0,
+      "elapsed_s": 7.15,
       "status": "ok",
       "name": "qb_simon_n6",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/simon_n6/simon_n6.qasm",
@@ -213,7 +233,7 @@
       "magic_log2": 244.06,
       "mps_bond_log2": 4.0,
       "mps_truncated": false,
-      "treewidth_log2": 19.0,
+      "treewidth_log2": null,
       "treewidth_exact": false,
       "stim_clifford": false,
       "best_method": "MPS(entangle)",
@@ -223,14 +243,14 @@
       "governing_estimator": "MPS",
       "governing_cost_log2": 4.0,
       "confidence": "high",
-      "confidence_score": 88,
+      "confidence_score": 77,
       "single_estimator_baselines": {
-        "treewidth_only": "CPU",
+        "treewidth_only": "ESCALATE",
         "mps_only": "CPU",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 135.64,
+      "elapsed_s": 25.38,
       "status": "ok",
       "name": "qb_vqe_uccsd_n8",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; small/vqe_uccsd_n8/vqe_uccsd_n8.qasm",
@@ -260,7 +280,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 18.3,
+      "elapsed_s": 11.8,
       "status": "ok",
       "name": "qb_bigadder_n18",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/bigadder_n18/bigadder_n18.qasm",
@@ -290,7 +310,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.19,
+      "elapsed_s": 10.73,
       "status": "ok",
       "name": "qb_bv_n19",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/bv_n19/bv_n19.qasm",
@@ -299,13 +319,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "qb_bwt_n21",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/bwt_n21/bwt_n21.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 21,
+      "t_count": 184800,
+      "magic_log2": 73217.76,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 73217.76,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 21.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 35.67
     },
     {
       "n": 22,
@@ -330,7 +370,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 17.92,
+      "elapsed_s": 10.72,
       "status": "ok",
       "name": "qb_cat_state_n22",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/cat_state_n22/cat_state_n22.qasm",
@@ -360,7 +400,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 25,
-      "elapsed_s": 19.68,
+      "elapsed_s": 11.35,
       "status": "ok",
       "name": "qb_cc_n12",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/cc_n12/cc_n12.qasm",
@@ -390,7 +430,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 23.35,
+      "elapsed_s": 15.07,
       "status": "ok",
       "name": "qb_dnn_n16",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/dnn_n16/dnn_n16.qasm",
@@ -399,13 +439,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "qb_factor247_n15",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/factor247_n15/factor247_n15.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 15,
+      "t_count": 343069,
+      "magic_log2": 135923.94,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 135923.94,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 15.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 41.32
     },
     {
       "n": 23,
@@ -430,7 +490,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 18.89,
+      "elapsed_s": 10.0,
       "status": "ok",
       "name": "qb_ghz_state_n23",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/ghz_state_n23/ghz_state_n23.qasm",
@@ -439,13 +499,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "qb_hhl_n14",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/hhl_n14/hhl_n14.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 14,
+      "t_count": 1606604,
+      "magic_log2": 636536.5,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 636536.5,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 14.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 67.22
     },
     {
       "n": 26,
@@ -470,7 +550,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 20.14,
+      "elapsed_s": 12.22,
       "status": "ok",
       "name": "qb_ising_n26",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/ising_n26/ising_n26.qasm",
@@ -500,7 +580,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.44,
+      "elapsed_s": 13.11,
       "status": "ok",
       "name": "qb_knn_n25",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/knn_n25/knn_n25.qasm",
@@ -530,7 +610,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.39,
+      "elapsed_s": 11.73,
       "status": "ok",
       "name": "qb_multiplier_n15",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/multiplier_n15/multiplier_n15.qasm",
@@ -560,7 +640,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 21.27,
+      "elapsed_s": 12.19,
       "status": "ok",
       "name": "qb_qft_n18",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/qft_n18/qft_n18.qasm",
@@ -590,7 +670,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.33,
+      "elapsed_s": 12.2,
       "status": "ok",
       "name": "qb_qram_n20",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/qram_n20/qram_n20.qasm",
@@ -620,7 +700,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 20.76,
+      "elapsed_s": 12.26,
       "status": "ok",
       "name": "qb_sat_n11",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/sat_n11/sat_n11.qasm",
@@ -650,7 +730,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 25.81,
+      "elapsed_s": 15.4,
       "status": "ok",
       "name": "qb_square_root_n18",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/square_root_n18/square_root_n18.qasm",
@@ -680,7 +760,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 20.65,
+      "elapsed_s": 10.9,
       "status": "ok",
       "name": "qb_swap_test_n25",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/swap_test_n25/swap_test_n25.qasm",
@@ -689,13 +769,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "TENSOR",
+      "governing_estimator": "statevector",
       "name": "qb_vqe_n24",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/vqe_n24/vqe_n24.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 24,
+      "t_count": 85560,
+      "magic_log2": 33898.87,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 33898.87,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 24.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 47.91
     },
     {
       "n": 27,
@@ -720,7 +820,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 14.34,
+      "elapsed_s": 12.29,
       "status": "ok",
       "name": "qb_wstate_n27",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; medium/wstate_n27/wstate_n27.qasm",
@@ -729,13 +829,34 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "ESCALATE",
+      "governing_estimator": "compute-bound",
       "name": "qb_QV_n100",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/QV_n100/100.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": false,
+      "n": 100,
+      "t_count": 90100,
+      "magic_log2": 35697.62,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 35697.62,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": null,
+      "confidence": "low",
+      "confidence_score": 36,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 1,
+      "elapsed_s": 36.54,
+      "escalate_verified": "Re-probed at ATLAS_EST_BUDGET_S=180s: still ESCALATE (MPS truncates/blows up -> high entanglement; treewidth abstains). Genuine hardness, NOT a small-n budget artifact. Re-probe elapsed 366.14s."
     },
     {
       "n": 64,
@@ -760,7 +881,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 14.47,
+      "elapsed_s": 13.64,
       "status": "ok",
       "name": "qb_adder_n64",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/adder_n64/adder_n64.qasm",
@@ -790,7 +911,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.74,
+      "elapsed_s": 10.46,
       "status": "ok",
       "name": "qb_bv_n30",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/bv_n30/bv_n30.qasm",
@@ -799,13 +920,34 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "ESCALATE",
+      "governing_estimator": "compute-bound",
       "name": "qb_bwt_n37",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/bwt_n37/bwt_n37.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": false,
+      "n": 37,
+      "t_count": 684000,
+      "magic_log2": 271000.8,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 271000.8,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": null,
+      "confidence": "low",
+      "confidence_score": 36,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 37.05,
+      "escalate_verified": "Re-probed at ATLAS_EST_BUDGET_S=180s: still ESCALATE (MPS truncates/blows up -> high entanglement; treewidth abstains). Genuine hardness, NOT a small-n budget artifact. Re-probe elapsed 370.59s."
     },
     {
       "n": 35,
@@ -830,7 +972,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.64,
+      "elapsed_s": 10.21,
       "status": "ok",
       "name": "qb_cat_n35",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/cat_n35/cat_n35.qasm",
@@ -860,7 +1002,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 65,
-      "elapsed_s": 11.7,
+      "elapsed_s": 10.81,
       "status": "ok",
       "name": "qb_cc_n32",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/cc_n32/cc_n32.qasm",
@@ -890,7 +1032,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 16.27,
+      "elapsed_s": 14.47,
       "status": "ok",
       "name": "qb_dnn_n51",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/dnn_n51/dnn_n51.qasm",
@@ -920,7 +1062,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.46,
+      "elapsed_s": 11.41,
       "status": "ok",
       "name": "qb_ghz_n40",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/ghz_n40/ghz_n40.qasm",
@@ -950,7 +1092,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 1,
-      "elapsed_s": 11.08,
+      "elapsed_s": 11.9,
       "status": "ok",
       "name": "qb_ising_n42",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/ising_n42/ising_n42.qasm",
@@ -980,7 +1122,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 11.61,
+      "elapsed_s": 11.64,
       "status": "ok",
       "name": "qb_knn_n41",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/knn_n41/knn_n41.qasm",
@@ -1010,22 +1152,45 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 228.09,
+      "elapsed_s": 209.63,
       "status": "ok",
       "name": "qb_multiplier_n75",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/multiplier_n75/multiplier_n75.qasm",
       "suite": "QASMBench",
-      "classical_tier": true
+      "classical_tier": true,
+      "est_budget_s_used": 240,
+      "budget_note": "MPS estimator is exact (bond 2^0, low-entanglement/TN-tractable) but slow to certify; needed a larger per-estimator budget than the corpus default 15s. Classical route is real, not budget-induced ESCALATE."
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "ESCALATE",
+      "governing_estimator": "compute-bound",
       "name": "qb_qft_n160",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/qft_n160/qft_n160.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": false,
+      "n": 160,
+      "t_count": 10212,
+      "magic_log2": 4045.99,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 4045.99,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": null,
+      "confidence": "low",
+      "confidence_score": 36,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 35.72,
+      "escalate_verified": "Re-probed at ATLAS_EST_BUDGET_S=180s: still ESCALATE (MPS truncates/blows up -> high entanglement; treewidth abstains). Genuine hardness, NOT a small-n budget artifact. Re-probe elapsed 387.13s."
     },
     {
       "n": 71,
@@ -1050,7 +1215,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 17.34,
+      "elapsed_s": 17.1,
       "status": "ok",
       "name": "qb_qugan_n71",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/qugan_n71/qugan_n71.qasm",
@@ -1059,13 +1224,34 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "ESCALATE",
+      "governing_estimator": "compute-bound",
       "name": "qb_square_root_n45",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/square_root_n45/square_root_n45.qasm",
       "suite": "QASMBench",
-      "classical_tier": false
+      "classical_tier": false,
+      "n": 45,
+      "t_count": 55860,
+      "magic_log2": 22131.73,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 22131.73,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": null,
+      "confidence": "low",
+      "confidence_score": 36,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 0,
+      "elapsed_s": 35.76,
+      "escalate_verified": "Re-probed at ATLAS_EST_BUDGET_S=180s: still ESCALATE (MPS truncates/blows up -> high entanglement; treewidth abstains). Genuine hardness, NOT a small-n budget artifact. Re-probe elapsed 367.43s."
     },
     {
       "n": 41,
@@ -1090,7 +1276,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 13.53,
+      "elapsed_s": 14.32,
       "status": "ok",
       "name": "qb_swap_test_n41",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/swap_test_n41/swap_test_n41.qasm",
@@ -1120,7 +1306,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 11.55,
+      "elapsed_s": 12.02,
       "status": "ok",
       "name": "qb_wstate_n76",
       "source": "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench; large/wstate_n76/wstate_n76.qasm",
@@ -1150,7 +1336,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 5.91,
+      "elapsed_s": 5.27,
       "status": "ok",
       "name": "mqt_grover_n8",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='grover' (algorithm level), n=8",
@@ -1180,7 +1366,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 5.82,
+      "elapsed_s": 5.31,
       "status": "ok",
       "name": "mqt_grover_n12",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='grover' (algorithm level), n=12",
@@ -1210,7 +1396,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 11.16,
+      "elapsed_s": 11.63,
       "status": "ok",
       "name": "mqt_qpeexact_n10",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qpeexact' (algorithm level), n=10",
@@ -1240,7 +1426,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.89,
+      "elapsed_s": 12.09,
       "status": "ok",
       "name": "mqt_qpeexact_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qpeexact' (algorithm level), n=16",
@@ -1270,7 +1456,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 12.21,
+      "elapsed_s": 11.7,
       "status": "ok",
       "name": "mqt_qpeinexact_n14",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qpeinexact' (algorithm level), n=14",
@@ -1300,7 +1486,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 13.46,
+      "elapsed_s": 13.21,
       "status": "ok",
       "name": "mqt_qaoa_n12",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qaoa' (algorithm level), n=12",
@@ -1330,7 +1516,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 12.04,
+      "elapsed_s": 13.2,
       "status": "ok",
       "name": "mqt_qftentangled_n20",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qftentangled' (algorithm level), n=20",
@@ -1360,7 +1546,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 19.3,
+      "elapsed_s": 19.14,
       "status": "ok",
       "name": "mqt_qftentangled_n40",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qftentangled' (algorithm level), n=40",
@@ -1369,13 +1555,33 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "mqt_qwalk_n12",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qwalk' (algorithm level), n=12",
       "suite": "MQT Bench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 12,
+      "t_count": 18210,
+      "magic_log2": 7214.8,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 7214.8,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 12.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 1,
+      "elapsed_s": 35.7
     },
     {
       "n": 30,
@@ -1400,7 +1606,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.37,
+      "elapsed_s": 13.9,
       "status": "ok",
       "name": "mqt_graphstate_n30",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='graphstate' (algorithm level), n=30",
@@ -1430,7 +1636,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 14.23,
+      "elapsed_s": 16.69,
       "status": "ok",
       "name": "mqt_graphstate_n60",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='graphstate' (algorithm level), n=60",
@@ -1460,7 +1666,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 6.27,
+      "elapsed_s": 5.43,
       "status": "ok",
       "name": "mqt_dj_n40",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='dj' (algorithm level), n=40",
@@ -1490,7 +1696,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 6.07,
+      "elapsed_s": 5.57,
       "status": "ok",
       "name": "mqt_dj_n80",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='dj' (algorithm level), n=80",
@@ -1520,7 +1726,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 11.64,
+      "elapsed_s": 12.36,
       "status": "ok",
       "name": "mqt_vqe_su2_n12",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='vqe_su2' (algorithm level), n=12",
@@ -1550,7 +1756,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 11.25,
+      "elapsed_s": 11.97,
       "status": "ok",
       "name": "mqt_vqe_real_amp_n14",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='vqe_real_amp' (algorithm level), n=14",
@@ -1580,7 +1786,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 10.72,
+      "elapsed_s": 14.71,
       "status": "ok",
       "name": "mqt_vqe_two_local_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='vqe_two_local' (algorithm level), n=16",
@@ -1610,7 +1816,7 @@
         "magic_only": "HPC_FIRST"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 9.85,
+      "elapsed_s": 13.39,
       "status": "ok",
       "name": "mqt_qnn_n12",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qnn' (algorithm level), n=12",
@@ -1640,7 +1846,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 9.74,
+      "elapsed_s": 12.16,
       "status": "ok",
       "name": "mqt_wstate_n50",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='wstate' (algorithm level), n=50",
@@ -1651,26 +1857,26 @@
       "n": 16,
       "t_count": 1060,
       "magic_log2": 419.97,
-      "mps_bond_log2": 8.0,
-      "mps_truncated": false,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
       "treewidth_log2": 31.0,
       "treewidth_exact": false,
       "stim_clifford": false,
-      "best_method": "MPS(entangle)",
-      "union_cost_log2": 8.0,
-      "verdict": "TRACTABLE via MPS(entangle) (2^8.0; ~16.8 MB footprint del metodo)",
+      "best_method": "contraction(treewidth)",
+      "union_cost_log2": 31.0,
+      "verdict": "TRACTABLE via contraction(treewidth) (2^31.0; ~34.4 GB footprint del metodo, NO cabe en 24 GB)",
       "route": "CPU",
       "governing_estimator": "statevector",
       "governing_cost_log2": 16.0,
       "confidence": "medium",
-      "confidence_score": 45,
+      "confidence_score": 54,
       "single_estimator_baselines": {
         "treewidth_only": "HPC_FIRST",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 3,
-      "elapsed_s": 57.08,
+      "elapsed_s": 24.45,
       "status": "ok",
       "name": "mqt_randomcircuit_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='randomcircuit' (algorithm level), n=16",
@@ -1681,14 +1887,14 @@
       "n": 24,
       "t_count": 2469,
       "magic_log2": 978.22,
-      "mps_bond_log2": 6.0,
+      "mps_bond_log2": null,
       "mps_truncated": true,
       "treewidth_log2": 47.0,
       "treewidth_exact": false,
       "stim_clifford": false,
-      "best_method": "MPS(entangle)",
-      "union_cost_log2": 6.0,
-      "verdict": "TRACTABLE via exact statevector (2^24 ~ 0.3 GB); MPS truncado y treewidth 2^47.0 no certifican, pero statevector si (n<=33)",
+      "best_method": "contraction(treewidth)",
+      "union_cost_log2": 47.0,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
       "route": "TENSOR",
       "governing_estimator": "statevector",
       "governing_cost_log2": 24.0,
@@ -1696,11 +1902,11 @@
       "confidence_score": 54,
       "single_estimator_baselines": {
         "treewidth_only": "ESCALATE",
-        "mps_only": "TENSOR",
+        "mps_only": "ESCALATE",
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 3,
-      "elapsed_s": 108.49,
+      "elapsed_s": 24.98,
       "status": "ok",
       "name": "mqt_randomcircuit_n24",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='randomcircuit' (algorithm level), n=24",
@@ -1730,7 +1936,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 8.66,
+      "elapsed_s": 12.24,
       "status": "ok",
       "name": "mqt_cdkm_ripple_carry_adder_n18",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='cdkm_ripple_carry_adder' (algorithm level), n=18",
@@ -1760,7 +1966,7 @@
         "magic_only": "ESCALATE"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 9.11,
+      "elapsed_s": 12.9,
       "status": "ok",
       "name": "mqt_draper_qft_adder_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='draper_qft_adder' (algorithm level), n=16",
@@ -1790,7 +1996,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 4.76,
+      "elapsed_s": 5.87,
       "status": "ok",
       "name": "mqt_modular_adder_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='modular_adder' (algorithm level), n=16",
@@ -1820,7 +2026,7 @@
         "magic_only": "CPU"
       },
       "n_parse_warnings": 0,
-      "elapsed_s": 4.69,
+      "elapsed_s": 5.71,
       "status": "ok",
       "name": "mqt_multiplier_n16",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='multiplier' (algorithm level), n=16",
@@ -1829,23 +2035,63 @@
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "mqt_shor_n18",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='shor' (algorithm level), n=18",
       "suite": "MQT Bench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 18,
+      "t_count": 13955,
+      "magic_log2": 5528.97,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 5528.97,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 18.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 1,
+      "elapsed_s": 36.41
     },
     {
       "status": "ok",
-      "route": "TIMEOUT",
-      "timeout_s": 300,
-      "governing_estimator": null,
+      "route": "CPU",
+      "governing_estimator": "statevector",
       "name": "mqt_qwalk_n20",
       "source": "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench; benchmark='qwalk' (algorithm level), n=20",
       "suite": "MQT Bench",
-      "classical_tier": false
+      "classical_tier": true,
+      "n": 20,
+      "t_count": 107922,
+      "magic_log2": 42758.7,
+      "mps_bond_log2": null,
+      "mps_truncated": true,
+      "treewidth_log2": null,
+      "treewidth_exact": false,
+      "stim_clifford": false,
+      "best_method": "fold(magic)",
+      "union_cost_log2": 42758.7,
+      "verdict": "WALL: todos los metodos exceden el presupuesto (nucleo irreducible)",
+      "governing_cost_log2": 20.0,
+      "confidence": "medium",
+      "confidence_score": 48,
+      "single_estimator_baselines": {
+        "treewidth_only": "ESCALATE",
+        "mps_only": "ESCALATE",
+        "magic_only": "ESCALATE"
+      },
+      "n_parse_warnings": 1,
+      "elapsed_s": 36.92
     }
   ],
   "engine": "atlas-codex/HANDOFF_5ideas cost_atlas + route_adjudicator (REAL)",
@@ -1853,5 +2099,6 @@
     "QASMBench (Li, Stein, Krishnamoorthy, Ang, ACM TQC 2023); github.com/pnnl/QASMBench",
     "MQT Bench (Quetschlich, Burgholzer, Wille, Quantum 7, 1062 (2023)); github.com/cda-tum/mqt-bench"
   ],
-  "note": "Offline research harness (batch 2). Web n-cap bypassed (cost_atlas called directly); live cap untouched; nothing deployed."
+  "note": "Offline research harness (batch 2). Web n-cap bypassed (cost_atlas called directly); live cap untouched; nothing deployed.",
+  "rerun_note": "Re-run 2026-06-30 through FIXED engine (per-estimator ATLAS_EST_BUDGET_S=15 budgets; graceful abstain). Previous per-estimator small-n HANGS (engine bug) resolved; those were an engine limitation, NOT circuit hardness. Wall cap 240s/circuit."
 }
