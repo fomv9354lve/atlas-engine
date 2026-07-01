@@ -305,16 +305,113 @@ def safe_parse(text: str):
 ARSENAL_CAP = 14    # arsenal_router.route (fold+spread) es ~2^n: n=14=21ms, n=16=107ms, n=18=579ms. Cap
                     # medido para quedar <~25ms; arriba SALTAMOS al fast-path (MPS/treewidth/magia, conservador).
 
+import os as _os, time as _time, pickle as _pickle, select as _select, signal as _signal
+
+
+def _env_float(name, default):
+    try:
+        return float(_os.environ.get(name) or default)
+    except (TypeError, ValueError):
+        return float(default)
+
+
+# ===== PRESUPUESTO WALL-CLOCK POR ESTIMADOR (env-tunable). Cada estimador clasico corre bajo su PROPIO
+# presupuesto: cotengra (treewidth), el build MPS de quimb, y el arsenal fold/spread (2^n). Si UNO excede su
+# presupuesto, ese fold ABSTIENE (queda "no computado") en vez de colgar TODO el diagnostico. El adjudicador
+# decide con los estimadores que SI resolvieron -- como el statevector exacto es O(1) de conocer para n
+# factible, un circuito de pocos qubits pero PROFUNDO (p.ej. hhl_n10 con 227k puertas) cuyo cotengra/MPS
+# explota IGUAL resuelve (el statevector gobierna) -> rapido y correcto. Ningun estimador aislado puede colgar.
+EST_BUDGET_S = _env_float("ATLAS_EST_BUDGET_S", 15.0)              # treewidth (cotengra) / MPS (quimb)
+ARSENAL_BUDGET_S = _env_float("ATLAS_ARSENAL_BUDGET_S", 15.0)      # arsenal fold/spread (exponencial 2^n)
+ARSENAL_MAX_GATES = int(_env_float("ATLAS_ARSENAL_MAX_GATES", 20000))  # cap de profundidad/#puertas del arsenal
+
+
+def _run_budgeted(fn, budget_s):
+    """Corre el estimador `fn` bajo su PROPIO presupuesto wall-clock, en un PROCESO HIJO (os.fork) que se
+    MATA (SIGKILL) al vencer el presupuesto. Devuelve:
+        (valor, "ok")       -> termino a tiempo (valor real, IDENTICO al comportamiento previo)
+        (None,  "timeout")  -> excedio el presupuesto -> ABSTIENE con gracia (fold no computado)
+        (exc,   "error")    -> el estimador lanzo excepcion (se re-propaga -> preserva el gt_error previo)
+
+    Por que un proceso y no un hilo: cotengra hace busqueda de camino en Python PURO (retiene el GIL), asi que
+    threading.Thread.join(timeout) NO puede prevenirlo -- el hilo cuelga igual. Solo un proceso separado se
+    puede MATAR de verdad (frena el trabajo desbocado, acota el wall-clock). os.fork (no multiprocessing)
+    evita la restriccion 'daemonic processes are not allowed to have children' del guard del server."""
+    if budget_s <= 0 or not hasattr(_os, "fork"):
+        try:
+            return fn(), "ok"                       # sin fork (p.ej. Windows) -> best-effort inline
+        except BaseException as e:                  # noqa: BLE001
+            return e, "error"
+    rd, wr = _os.pipe()
+    pid = _os.fork()
+    if pid == 0:                                    # ---- HIJO: computa y serializa por el pipe, luego _exit
+        try:
+            _os.close(rd)
+            try:
+                payload = ("ok", fn())
+            except BaseException as e:              # noqa: BLE001 -- reporta el error al padre, no crashea
+                payload = ("error", repr(e))
+            try:
+                _os.write(wr, _pickle.dumps(payload))
+            except BaseException:                   # noqa: BLE001 -- resultado no serializable -> el padre abstiene
+                pass
+        finally:
+            try:
+                _os.close(wr)
+            except OSError:
+                pass
+            _os._exit(0)
+    # ---- PADRE: lee del pipe con deadline; si vence, MATA al hijo y abstiene
+    _os.close(wr)
+    deadline = _time.time() + budget_s
+    chunks, finished = [], False
+    try:
+        while True:
+            remaining = deadline - _time.time()
+            if remaining <= 0:
+                break
+            ready, _, _ = _select.select([rd], [], [], remaining)
+            if not ready:
+                break                               # timeout
+            chunk = _os.read(rd, 65536)
+            if not chunk:
+                finished = True; break              # EOF -> el hijo termino
+            chunks.append(chunk)
+    finally:
+        _os.close(rd)
+    if not finished:                                # venció el presupuesto -> SIGKILL (frena el trabajo real)
+        try:
+            _os.kill(pid, _signal.SIGKILL)
+        except OSError:
+            pass
+    try:
+        _os.waitpid(pid, 0)                         # cosecha el hijo (evita zombies)
+    except OSError:
+        pass
+    if not finished:
+        return None, "timeout"
+    try:
+        tag, val = _pickle.loads(b"".join(chunks))
+    except BaseException:                           # noqa: BLE001 -- datos incompletos -> abstiene
+        return None, "timeout"
+    return (val, "ok") if tag == "ok" else (RuntimeError(val), "error")
+
 
 def _resources(best, cost_log2, n, mps_log2):
     """CAPA 8: convierte 'TRACTABLE' (semaforo) en RECURSOS cuantificados (RAM/tiempo). Honesto: estimacion
     de orden de magnitud del recurso DOMINANTE del mejor metodo, con complex128 (16 B/amplitud)."""
     if cost_log2 is None:
         return None
-    if "MPS" in best:                                       # MPS: ~ n * bond^2 * 16 B
-        ram = n * (4.0 ** mps_log2) * 16.0
-    else:                                                   # treewidth/spread/fold: ~ 2^cost * 16 B (mayor tensor)
-        ram = (2.0 ** cost_log2) * 16.0
+    try:                                                    # el exponente puede ser ENORME (p.ej. fold(magic)
+        if "MPS" in best:                                   # de un circuito con cientos de miles de T) -> 2**exp
+            ram = n * (4.0 ** mps_log2) * 16.0              # desborda. Antes reventaba con OverflowError y mataba
+        else:                                               # el route_adjudication entero; ahora -> "infeasible".
+            ram = (2.0 ** cost_log2) * 16.0
+    except OverflowError:
+        ram = math.inf
+    if not math.isfinite(ram):                              # metodo astronomicamente caro: no cabe, sin desbordar
+        return {"ram_bytes": math.inf, "ram_human": "infeasible (desbordamiento)", "time_s": math.inf,
+                "fits_24gb": False, "method": best}
     t_s = ram / 2e10                                        # ~20 GB/s de ancho de banda de memoria efectivo
     for u, d in [(1e15, "PB"), (1e12, "TB"), (1e9, "GB"), (1e6, "MB"), (1e3, "kB")]:
         if ram >= u:
@@ -332,21 +429,54 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
     recursos cuantificados (RAM/tiempo), no solo un veredicto-semaforo."""
     from ground_truth import mps_bond_log2, treewidth_log2, cross_validate
     t_count = sum(1 for g in circuit if g and g[0] == "t")
-    if _ENGINE and n <= ARSENAL_CAP:
-        r = arsenal_router.route(n, circuit, observable)    # fold/MPS/spread/treewidth + min (motor presente)
-    else:                                                   # FAST PATH (deuda #3): sin arsenal exponencial
-        # fold(magic) = extent estabilizador ~ 0.3962 * t_count (medido vs arsenal: coincide exacto). Asi el
-        # fast-path SI tiene la ruta de magia (cierra la brecha de coste vs el full path), sin el arsenal.
-        r = {"costs_log2": {"fold(magic)": round(0.3962 * t_count, 2), "spread(local)": None,
+
+    def _fast_path(extra=None):
+        # FAST PATH (deuda #3): sin arsenal exponencial. fold(magic) = extent estabilizador ~ 0.3962 * t_count
+        # (medido vs arsenal: coincide exacto). Asi el fast-path SI tiene la ruta de magia (cierra la brecha de
+        # coste vs el full path), sin el arsenal. MPS/treewidth los rellena el ground-truth (quimb/cotengra) abajo.
+        d = {"costs_log2": {"fold(magic)": round(0.3962 * t_count, 2), "spread(local)": None,
                             "MPS(entangle)": 0.0, "contraction(treewidth)": 0.0}, "fast_path": True}
+        if extra:
+            d.update(extra)
+        return d
+
+    if _ENGINE and n <= ARSENAL_CAP and len(circuit) <= ARSENAL_MAX_GATES:
+        # arsenal fold/spread (2^n): bajo su PROPIO presupuesto. Si explota (circuito profundo) -> abstiene y
+        # cae al fast-path (magia via fold, MPS/treewidth por ground-truth). No cuelga la diagnosis.
+        rv, st = _run_budgeted(lambda: arsenal_router.route(n, circuit, observable), ARSENAL_BUDGET_S)
+        r = rv if st == "ok" else _fast_path({"arsenal_abstained": True, "arsenal_status": st})
+    elif _ENGINE and n <= ARSENAL_CAP:                       # #puertas > cap -> el arsenal 2^n reventaria -> abstiene
+        r = _fast_path({"arsenal_abstained": True, "arsenal_status": "gate_cap"})
+    else:                                                   # motor ausente o n>ARSENAL_CAP -> fast-path directo
+        r = _fast_path()
     r["libro_flattener"] = which_flattener(circuit)
     r["t_count"] = t_count
     r["gt_ok"] = False; r["ground_truth"] = None
     try:                                                    # GROUND TRUTH para TODO n (poly): quimb + cotengra
-        b, trunc = mps_bond_log2(n, circuit)
-        tw, tw_exact = treewidth_log2(n, circuit)
-        r["costs_log2"]["MPS(entangle)"] = round(b, 2)
-        r["costs_log2"]["contraction(treewidth)"] = round(tw, 2)
+        # Cada estimador bajo su PROPIO presupuesto. "ok" -> valor real (identico al previo). "timeout" ->
+        # ABSTIENE (fold no computado): la MPS se marca truncada (el adjudicador la INVALIDA como cota inferior)
+        # y el treewidth queda None (el adjudicador no lo usa para certificar ruta). "error" -> se re-propaga
+        # para conservar el gt_error previo. El statevector exacto (siempre disponible para n factible) gobierna.
+        mps_val, mps_st = _run_budgeted(lambda: mps_bond_log2(n, circuit), EST_BUDGET_S)
+        tw_val, tw_st = _run_budgeted(lambda: treewidth_log2(n, circuit), EST_BUDGET_S)
+        if mps_st == "error":
+            raise mps_val
+        if tw_st == "error":
+            raise tw_val
+        if mps_st == "ok":
+            b, trunc = mps_val
+            r["costs_log2"]["MPS(entangle)"] = round(b, 2)
+        else:                                                 # MPS excedio su presupuesto -> ABSTIENE (bond desconocido)
+            b, trunc = float(n) / 2.0, True                   # sentinel para cross_validate; trunc=True -> invalidada
+            r["costs_log2"]["MPS(entangle)"] = None
+            r["mps_abstained"] = True
+        if tw_st == "ok":
+            tw, tw_exact = tw_val
+            r["costs_log2"]["contraction(treewidth)"] = round(tw, 2)
+        else:                                                 # treewidth excedio su presupuesto -> ABSTIENE
+            tw, tw_exact = float(budget_log2), False          # sentinel para cross_validate; None en costs -> no-ruta
+            r["costs_log2"]["contraction(treewidth)"] = None
+            r["treewidth_abstained"] = True
         r["gt_ok"] = True; r["mps_truncated"] = trunc; r["treewidth_exact"] = tw_exact
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)

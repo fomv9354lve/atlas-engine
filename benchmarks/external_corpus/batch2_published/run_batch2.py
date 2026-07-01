@@ -25,7 +25,7 @@ import os, sys, json, glob, shutil, subprocess
 HERE = os.path.dirname(os.path.abspath(__file__))
 QDIR = os.path.join(HERE, "qasm")
 WORKER = os.path.join(os.path.dirname(HERE), "worker.py")  # reuse batch1 worker (read-only)
-VENV_PY = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/.atlas-venv/bin/python"
+VENV_PY = ".atlas-venv/bin/python"
 QB = "/private/tmp/claude-501/-Users-kreniq-Desktop-KRENIQ-AI-Projects-01--Investigacion-physics-magnitude-lab/59534d24-537e-46a5-b569-4e533c23aad5/scratchpad/QASMBench"
 TIMEOUT_S = 300  # per-circuit wall cap; exceeding -> route="TIMEOUT" (honest). Cap reported.
 RESULTS_PATH = os.path.join(HERE, "results.json")

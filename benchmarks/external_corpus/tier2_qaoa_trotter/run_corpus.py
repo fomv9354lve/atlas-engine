@@ -16,7 +16,7 @@ import os, sys, json, math, random, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 QASM_DIR = os.path.join(HERE, "qasm")
-VENV_PY = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/.atlas-venv/bin/python"
+VENV_PY = ".atlas-venv/bin/python"
 TIMEOUT_S = 600
 CLASSICAL_TIERS = {"CPU", "TENSOR", "HPC_FIRST"}
 

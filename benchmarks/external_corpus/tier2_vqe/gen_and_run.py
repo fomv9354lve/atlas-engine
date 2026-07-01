@@ -17,7 +17,7 @@ import os, sys, json, time, math, random
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 QASM_DIR = os.path.join(HERE, "qasm")
-ENGINE = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/HANDOFF_5ideas"
+ENGINE = "HANDOFF_5ideas"
 os.makedirs(QASM_DIR, exist_ok=True)
 
 random.seed(1234)

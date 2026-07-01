@@ -46,18 +46,27 @@ def _num(x, default=0.0):
         return default
 
 
+def _numornone(x):
+    return x if isinstance(x, (int, float)) else None
+
+
 def _costs(result: dict) -> dict:
     c = result.get("costs_log2") or {}
+    # mps/treewidth pueden ser None si el estimador ABSTUVO (excedio su presupuesto wall-clock). Antes se
+    # forzaban a 0.0 (_num) -> un fold no-computado parecia 2^0 (baratisimo) -> ruta CPU falsa. Ahora None:
+    # el adjudicador lo trata como "no computado" (invalida la ruta), no como coste cero.
     return {
         "magic": _num(c.get("fold(magic)")),
         "spread": c.get("spread(local)") if isinstance(c.get("spread(local)"), (int, float)) else None,
-        "mps": _num(c.get("MPS(entangle)")),
-        "treewidth": _num(c.get("contraction(treewidth)")),
+        "mps": _numornone(c.get("MPS(entangle)")),
+        "treewidth": _numornone(c.get("contraction(treewidth)")),
     }
 
 
 def treewidth_only_route(result: dict) -> str:
     tw = _costs(result)["treewidth"]
+    if tw is None:                       # abstuvo -> sin ruta certificada por treewidth
+        return "ESCALATE"
     if tw <= CPU_TW_MAX:
         return "CPU"
     if tw <= TENSOR_TW_MAX:
@@ -69,6 +78,8 @@ def treewidth_only_route(result: dict) -> str:
 
 def mps_only_route(result: dict) -> str:
     mps = _costs(result)["mps"]
+    if mps is None:                      # abstuvo -> sin ruta certificada por MPS
+        return "ESCALATE"
     if mps <= CPU_MPS_MAX:
         return "CPU"
     if mps <= TENSOR_MPS_MAX:
@@ -185,7 +196,7 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
         valid_routes.append({"route": "CPU", "estimator": "Pauli spread", "cost_log2": round(spread, 2),
                              "reason": "local Pauli spread remains bounded"})
 
-    if not mps_truncated:
+    if c["mps"] is not None and not mps_truncated:
         if c["mps"] <= CPU_MPS_MAX:
             valid_routes.append({"route": "CPU", "estimator": "MPS", "cost_log2": round(c["mps"], 2),
                                  "reason": "exact MPS bond is in a laptop range"})
@@ -195,11 +206,17 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
         else:
             valid_routes.append({"route": "HPC_FIRST", "estimator": "MPS", "cost_log2": round(c["mps"], 2),
                                  "reason": "exact MPS bond exceeds ordinary tensor budget"})
+    elif c["mps"] is None:                       # MPS abstuvo (excedio su presupuesto) -> no computado
+        invalidated.append({"estimator": "MPS", "observed": "not computed (per-estimator budget exceeded)",
+                            "reason": "MPS build exceeded its wall-clock budget and abstained; cannot certify a route"})
     else:
         invalidated.append({"estimator": "MPS", "observed": f">=2^{round(c['mps'], 2)}",
                             "reason": "truncated MPS is a lower bound and cannot certify a cheap route"})
 
-    if c["treewidth"] <= CPU_TW_MAX:
+    if c["treewidth"] is None:                   # treewidth abstuvo (cotengra excedio su presupuesto) -> no computado
+        invalidated.append({"estimator": "treewidth", "observed": "not computed (per-estimator budget exceeded)",
+                            "reason": "contraction-path search exceeded its wall-clock budget and abstained"})
+    elif c["treewidth"] <= CPU_TW_MAX:
         valid_routes.append({"route": "CPU", "estimator": "treewidth", "cost_log2": round(c["treewidth"], 2),
                              "reason": "contraction width is tiny"})
     elif c["treewidth"] <= TENSOR_TW_MAX:
@@ -212,7 +229,16 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
         valid_routes.append({"route": "ESCALATE", "estimator": "treewidth", "cost_log2": round(c["treewidth"], 2),
                              "reason": "contraction width exceeds declared classical budget"})
 
-    governing = min(valid_routes, key=lambda r: (ORDER[r["route"]], r["cost_log2"]))
+    if not valid_routes:
+        # TODOS los estimadores abstuvieron y no hay certificado de statevector factible (n grande): deferral
+        # operacional HONESTO (no es una afirmacion de dureza), en vez de un cuelgue crudo. Es el "partial
+        # graceful" para los circuitos genuinamente enormes cuyos folds exceden su presupuesto.
+        valid_routes.append({"route": "ESCALATE", "estimator": "compute-bound", "cost_log2": None,
+                             "reason": "all estimators exceeded their per-estimator wall-clock budget and no "
+                                       "statevector certificate is available; defer to HPC / longer budget"})
+
+    governing = min(valid_routes, key=lambda r: (ORDER[r["route"]],
+                                                 r["cost_log2"] if r["cost_log2"] is not None else 1e9))
     route = governing["route"]
     baselines = {
         "treewidth_only": treewidth_only_route(result),

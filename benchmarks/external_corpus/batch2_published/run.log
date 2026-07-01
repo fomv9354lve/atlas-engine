@@ -164,4 +164,4 @@ running mqt_qwalk_n20 ...
   "per_circuit_timeout_s": 300
 }
 
-wrote /Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/benchmarks/external_corpus/batch2_published/results.json
+wrote benchmarks/external_corpus/batch2_published/results.json

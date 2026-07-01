@@ -6,7 +6,7 @@ cost_atlas directly (research-only; the live cap is untouched)."""
 from __future__ import annotations
 import sys, json, time, os
 
-ENGINE = "/Users/kreniq/Desktop/KRENIQ/AI Projects/01. Investigacion/00. OPORTUNIDADES/codex_subrepo/atlas-codex/HANDOFF_5ideas"
+ENGINE = "HANDOFF_5ideas"
 sys.path.insert(0, ENGINE)
 os.chdir(ENGINE)  # ground_truth/atlas use relative 'src' path
 
