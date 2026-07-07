@@ -481,7 +481,7 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)
         r["ground_truth"] = gt
-        r["stim_clifford"] = bool(gt.get("stim_clifford"))
+        r["stim_clifford"] = bool(gt.get("stim_clifford") or stim_is_clifford(circuit))
         r.setdefault("cross_warnings", []).extend(gt["warnings"])
         if r.get("fast_path"):
             over = n > ARSENAL_CAP
