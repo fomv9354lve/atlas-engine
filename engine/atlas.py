@@ -427,7 +427,7 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
     """El atlas de costo. MPS y treewidth se CABLEAN a ground-truth (quimb/cotengra), que es POLINOMIAL y
     escala a n grande; el arsenal (exponencial) solo se usa para n<=ARSENAL_CAP (da fold/spread). Reporta
     recursos cuantificados (RAM/tiempo), no solo un veredicto-semaforo."""
-    from ground_truth import mps_bond_log2, treewidth_log2, cross_validate
+    from ground_truth import mps_bond_log2, treewidth_log2, cross_validate, stim_is_clifford
     t_count = sum(1 for g in circuit if g and g[0] == "t")
 
     def _fast_path(extra=None):
@@ -457,8 +457,16 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         # ABSTIENE (fold no computado): la MPS se marca truncada (el adjudicador la INVALIDA como cota inferior)
         # y el treewidth queda None (el adjudicador no lo usa para certificar ruta). "error" -> se re-propaga
         # para conservar el gt_error previo. El statevector exacto (siempre disponible para n factible) gobierna.
-        mps_val, mps_st = _run_budgeted(lambda: mps_bond_log2(n, circuit), EST_BUDGET_S)
-        tw_val, tw_st = _run_budgeted(lambda: treewidth_log2(n, circuit), EST_BUDGET_S)
+        # CLIFFORD EARLY-EXIT (Move 2, medido): si el circuito es Clifford puro (chequeo sintactico O(#gates)),
+        # Stim lo simula EXACTO en tiempo poly a CUALQUIER n (Gottesman-Knill) y la regla Clifford->CPU del
+        # adjudicador gana el min sin importar bond/treewidth. Correr quimb+cotengra aqui no aporta NADA a la
+        # ruta -> se saltan, marcados como 'skipped'. A/B medido: ~30s -> <1s en Clifford n>=22.
+        _cliff_skip = (t_count == 0) and stim_is_clifford(circuit)
+        if _cliff_skip:
+            mps_st = tw_st = "clifford_skip"; mps_val = tw_val = None
+        else:
+            mps_val, mps_st = _run_budgeted(lambda: mps_bond_log2(n, circuit), EST_BUDGET_S)
+            tw_val, tw_st = _run_budgeted(lambda: treewidth_log2(n, circuit), EST_BUDGET_S)
         if mps_st == "error":
             raise mps_val
         if tw_st == "error":
@@ -469,14 +477,18 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         else:                                                 # MPS excedio su presupuesto -> ABSTIENE (bond desconocido)
             b, trunc = float(n) / 2.0, True                   # sentinel para cross_validate; trunc=True -> invalidada
             r["costs_log2"]["MPS(entangle)"] = None
-            r["mps_abstained"] = True
+            r["mps_skipped_clifford" if mps_st == "clifford_skip" else "mps_abstained"] = True
         if tw_st == "ok":
             tw, tw_exact = tw_val
             r["costs_log2"]["contraction(treewidth)"] = round(tw, 2)
         else:                                                 # treewidth excedio su presupuesto -> ABSTIENE
             tw, tw_exact = float(budget_log2), False          # sentinel para cross_validate; None en costs -> no-ruta
             r["costs_log2"]["contraction(treewidth)"] = None
-            r["treewidth_abstained"] = True
+            r["tw_skipped_clifford" if tw_st == "clifford_skip" else "treewidth_abstained"] = True
+        if _cliff_skip:
+            r.setdefault("cross_warnings", []).append(
+                "Clifford (Stim exacto, cualquier n): quimb/cotengra SALTADOS a proposito -- Gottesman-Knill "
+                "da la ruta CPU exacta; bond/treewidth no computados (no aportan a la ruta)")
         r["gt_ok"] = True; r["mps_truncated"] = trunc; r["treewidth_exact"] = tw_exact
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)
@@ -528,8 +540,10 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         r["exact_verification"] = {
             "magic": ("exacto: unitario Clifford (n<=9)" if "clifford_exact" in mv
                       else "exacto: Stim Clifford-ness (cualquier n)"),
-            "MPS": ("exacto (bond no truncado)" if not trunc else "cota inferior (bond truncado)"),
-            "treewidth": ("OPTIMO EXACTO (red pequena)" if tw_exact else "cota superior heuristica (greedy)"),
+            "MPS": ("no computado (Clifford: Stim exacto cubre la ruta)" if r.get("mps_skipped_clifford")
+                    else "exacto (bond no truncado)" if not trunc else "cota inferior (bond truncado)"),
+            "treewidth": ("no computado (Clifford: Stim exacto cubre la ruta)" if r.get("tw_skipped_clifford")
+                          else "OPTIMO EXACTO (red pequena)" if tw_exact else "cota superior heuristica (greedy)"),
         }
         # MODELO DE RUIDO (analitico): convierte el veredicto coherente en un rango [ruidoso, coherente].
         n_2q = sum(1 for g in circuit if g and g[0] in ("cx", "cnot", "cz"))
