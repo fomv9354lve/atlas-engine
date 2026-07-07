@@ -489,6 +489,10 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
             r.setdefault("cross_warnings", []).append(
                 "Clifford (Stim exacto, cualquier n): quimb/cotengra SALTADOS a proposito -- Gottesman-Knill "
                 "da la ruta CPU exacta; bond/treewidth no computados (no aportan a la ruta)")
+            # magia efectiva = 0 por TEOREMA para Clifford (espectro estabilizador maximalmente plano);
+            # validado ademas en corpus real: 8/8 Clifford leen 0.0000 exacto.
+            r["anti_flatness"] = 0.0
+            r["anti_flatness_basis"] = "theorem-clifford"
         r["gt_ok"] = True; r["mps_truncated"] = trunc; r["treewidth_exact"] = tw_exact
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)
