@@ -423,11 +423,68 @@ def _resources(best, cost_log2, n, mps_log2):
             "fits_24gb": feasible, "method": best}
 
 
+def _matchgate_route_overlay(adj, cost_log2, result):
+    """OVERLAY matchgate->CPU sobre la adjudicacion (solo corre con ATLAS_MATCHGATE=1 y circuito matchgate).
+
+    El certificado free-fermion es un TEOREMA (simulacion poly a CUALQUIER n: Valiant 2001, Terhal-DiVincenzo
+    2002; suma de amplitudes via la identidad Pfaffiana sum_S Pf(A_S)^2 = sqrt(det(I+A^T A)) -- ver
+    freefermion.py, incl. los guardarrailes refutados que acotan la ruta al lado fermionico/Pfaffiano).
+    route_adjudicator.py es de OTRO agente y NO se toca: aqui se INYECTA el certificado en valid_routes y se
+    re-elige la ruta gobernante con LA MISMA regla del adjudicador (min por orden de ruta y coste).
+    TODO(route_adjudicator.py, otro agente): adoptar el certificado nativo (y su bonus exact_basis en
+    _confidence, que este overlay no puede reclamar -> la confianza recalculada queda CONSERVADORA)."""
+    try:
+        from route_adjudicator import ORDER, _confidence
+        cert = {"route": "CPU", "estimator": "free-fermion (matchgate)", "cost_log2": cost_log2,
+                "reason": "matchgate circuit: Majorana-covariance free-fermion simulation is polynomial for "
+                          "any n (Valiant 2001; Terhal-DiVincenzo 2002; Pfaffian amplitude-sum identity)"}
+        adj.setdefault("valid_routes", []).append(cert)
+        governing = min(adj["valid_routes"],
+                        key=lambda x: (ORDER[x["route"]], x["cost_log2"] if x["cost_log2"] is not None else 1e9))
+        route = governing["route"]
+        adj["route"] = route; adj["route_order"] = ORDER[route]
+        adj["governing_estimator"] = governing["estimator"]
+        adj["governing_cost_log2"] = governing["cost_log2"]
+        adj["governing_reason"] = governing["reason"]
+        if governing is cert:
+            adj["governing_reason_code"] = "matchgate_cpu"
+        base = adj.get("single_estimator_baselines", {})
+        adj["baseline_disagreements"] = {k: v for k, v in base.items() if v != route}
+        cf = []                                            # mismas 3 reglas de counterfactuals del adjudicador
+        if base.get("treewidth_only") in ("HPC_FIRST", "ESCALATE") and route in ("CPU", "TENSOR"):
+            cf.append({"baseline": "treewidth_only", "failure_mode": "false_alarm",
+                       "why_atlas_differs": "a cheaper exact route was found before escalating"})
+        if bool(result.get("mps_truncated")) and base.get("mps_only") in ("CPU", "TENSOR") \
+                and route in ("HPC_FIRST", "ESCALATE"):
+            cf.append({"baseline": "mps_only", "failure_mode": "false_safety",
+                       "why_atlas_differs": "truncated MPS lower bound cannot certify tractability"})
+        if base.get("magic_only") != route:
+            cf.append({"baseline": "magic_only", "failure_mode": "missing_structure",
+                       "why_atlas_differs": "T-count alone ignores entanglement and contraction structure"})
+        adj["counterfactuals"] = cf
+        try:
+            adj["confidence"] = _confidence(route, governing, adj["valid_routes"],
+                                            adj.get("invalidated_estimators", []), result)
+        except Exception:
+            pass
+        if isinstance(adj.get("causal_chain"), list) and adj["causal_chain"]:
+            adj["causal_chain"][-1] = {"step": "select",
+                                       "statement": f"choose cheapest valid route: {route} via {governing['estimator']}"}
+        adj["matchgate_overlay"] = True
+    except Exception:
+        pass                                               # overlay best-effort: jamas rompe la adjudicacion base
+
+
+
 def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict:
     """El atlas de costo. MPS y treewidth se CABLEAN a ground-truth (quimb/cotengra), que es POLINOMIAL y
     escala a n grande; el arsenal (exponencial) solo se usa para n<=ARSENAL_CAP (da fold/spread). Reporta
     recursos cuantificados (RAM/tiempo), no solo un veredicto-semaforo."""
     from ground_truth import mps_bond_log2, treewidth_log2, cross_validate, stim_is_clifford
+    try:                                                    # 4a ruta-teorema (matchgate); opcional: sin el modulo,
+        import freefermion as _ff                           # Atlas degrada a exactamente el comportamiento previo
+    except Exception:
+        _ff = None
     t_count = sum(1 for g in circuit if g and g[0] == "t")
 
     def _fast_path(extra=None):
@@ -464,6 +521,27 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         _cliff_skip = (t_count == 0) and stim_is_clifford(circuit)
         if _cliff_skip:
             mps_st = tw_st = "clifford_skip"; mps_val = tw_val = None
+        else:
+            mps_val, mps_st = _run_budgeted(lambda: mps_bond_log2(n, circuit), EST_BUDGET_S)
+            tw_val, tw_st = _run_budgeted(lambda: treewidth_log2(n, circuit), EST_BUDGET_S)
+        # MATCHGATE EARLY-EXIT (4a ruta-teorema; analogo matchgate del early-exit Clifford). Chequeo
+        # SINTACTICO O(#gates): ¿todas las puertas son matchgates vecino-proximo en la linea (XX/YY/Z-type)?
+        # Si SI -> simulacion free-fermion clasica en tiempo POLY por TEOREMA (Valiant 2001; Terhal-DiVincenzo
+        # 2002), con la maquinaria de suma-de-amplitudes dada por la identidad Pfaffiana QED del operador
+        # sum_S Pf(A_S)^2 = sqrt(det(I+A^T A)) (ver freefermion.py, que tambien documenta los DOS guardarrailes
+        # refutados -- Heilmann-Lieb y strong-Rayleigh caen para hafnianos al cuadrado -> la ruta es SOLO
+        # fermionica/Pfaffiana, jamas extenderla al lado bosonico/hafniano).
+        #   - deteccion: SIEMPRE (solo emite r["matchgate"]=True + un cross_warning; aditivo, 0 cambios mas).
+        #   - salto de quimb/cotengra (como el path Clifford): SOLO con ATLAS_MATCHGATE=1 (DEFAULT OFF --
+        #     ships dark hasta validacion adicional). Clifford tiene precedencia (ruta ya embarcada).
+        # TODO(atlas_certificate.py, OTRO agente): etiquetar evidence_basis='theorem' para la ruta matchgate
+        # (follow-up de una linea; ese archivo NO se toca desde aqui).
+        _mg = bool(_ff is not None and not _cliff_skip and _ff.is_matchgate(circuit, n))
+        _mg_skip = _mg and _ff.matchgate_enabled()
+        if _cliff_skip:
+            mps_st = tw_st = "clifford_skip"; mps_val = tw_val = None
+        elif _mg_skip:
+            mps_st = tw_st = "matchgate_skip"; mps_val = tw_val = None
         else:
             mps_val, mps_st = _run_budgeted(lambda: mps_bond_log2(n, circuit), EST_BUDGET_S)
             tw_val, tw_st = _run_budgeted(lambda: treewidth_log2(n, circuit), EST_BUDGET_S)

@@ -179,7 +179,7 @@ def certify(confidence_score, label, features, route=None, alpha=0.05):
         statement = (f"OUT-OF-DISTRIBUTION on {over}: outside calibration support -> "
                      f"coverage guarantee does NOT apply -> verify")
     elif accepted:
-        statement = (f"CALIBRATED (held-out): route-correctness >= "
+        statement = (f"CALIBRATED (held-out): self-consistency vs same-formalism oracle >= "
                      f"{thr['guaranteed_correctness']:.3f} for conf>={thr['tau']:.0f} "
                      f"(val coverage {thr['val_coverage']:.2f}, alpha={thr['alpha']}, "
                      f"exchangeable)")
