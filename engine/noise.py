@@ -38,11 +38,40 @@ def noise_model(n_2q, hardness_log2, magic, p, budget_log2=40.0, n=None):
     if hardness_log2 > budget_log2 and n_2q > 0:
         lam_crit = hardness_log2 / budget_log2              # phi* = budget/hard -> lambda* = 1/phi*
         p_crit = lam_crit / n_2q
+    # WALSH LEVEL-DAMPING (medido 2026-07, benchmarks/noise_walsh_damping): la masa de correlacion
+    # Walsh de nivel r se amortigua ~ rho_eff^{c*r}. Canal terminal: c=2 EXACTO (R^2=1.0000) -> el
+    # nivel de pares da rho^4 = la ley annealed beta*rho^4 del paper inverse-Ginibre, VERBATIM.
+    # Canal por-gate interleaved: c~1.15 efectivo (mecanismo: conteos de lightcone retro-propagado).
+    # r* = orden de correlacion que SOBREVIVE al ruido (umbral eps=1% de masa): estructura Walsh por
+    # encima de r* esta lavada. ADITIVO/display: NO altera phi, el rango ni el regimen existentes.
+    walsh_cutoff = None
+    if n_2q > 0 and n and p > 0:
+        rho_eff = (1.0 - p) ** (2.0 * float(n_2q) / float(n))
+        if 0.0 < rho_eff < 1.0:
+            _eps = 0.01
+            _lr = math.log(1.0 / rho_eff)
+            r_conserv = math.log(1.0 / _eps) / (2.0 * _lr)    # c=2 (terminal, exacto)
+            r_optim = math.log(1.0 / _eps) / (1.15 * _lr)     # c=1.15 (por-gate, medido)
+            # PROPUESTA COMPLETA (REPORT.md de noise_walsh_damping): phi_level = fraccion del
+            # espectro de ordenes que sobrevive = min(1, r*/n). Rango de dos lados [conservador
+            # c=2, optimista c=1.15] JUNTO al phi de lambda existente (que queda intacto). La
+            # dureza ruidosa por-nivel: el circuito solo puede exhibir dureza de correlaciones
+            # que sobreviven -> noisy_hardness_walsh = hardness * phi_level, como RANGO.
+            phi_lvl_c = min(1.0, r_conserv / float(n))
+            phi_lvl_o = min(1.0, r_optim / float(n))
+            walsh_cutoff = {"rho_eff": round(rho_eff, 4),
+                            "r_star_range": [round(r_conserv, 1), round(r_optim, 1)],
+                            "c_range": [2.0, 1.15], "eps": _eps,
+                            "phi_level_range": [round(phi_lvl_c, 3), round(phi_lvl_o, 3)],
+                            "noisy_hardness_walsh_range_log2": [round(hardness_log2 * phi_lvl_c, 2),
+                                                                round(hardness_log2 * phi_lvl_o, 2)],
+                            "note": "surviving Walsh correlation order; structure above r* is noise-washed"}
     return {"p": p, "lambda": round(lam, 3), "fidelity": round(fidelity, 5), "phi": round(phi, 3),
             "noisy_hardness_log2": round(noisy_hard, 2), "noisy_magic": round(noisy_magic, 1),
             "regime": regime, "noisy_tractable": bool(noisy_tractable),
             "p_crit": round(p_crit, 5) if p_crit else None,
-            "coherent_hardness_log2": round(hardness_log2, 2), "n_2q": n_2q}
+            "coherent_hardness_log2": round(hardness_log2, 2), "n_2q": n_2q,
+            "walsh_order_cutoff": walsh_cutoff}
 
 
 def main():
