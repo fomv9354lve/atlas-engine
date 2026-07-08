@@ -544,6 +544,11 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchga
             r["spread_local_log2"] = None if _sp_aborted else round(_sp, 2)
             r["spread_source"] = "pauli-propagation (n-independent)"
             r["spread_aborted"] = bool(_sp_aborted)
+            # RUTEO por spread ACTIVADO: alimenta el adjudicador para TODO n. Solo certifica cuando el
+            # observable local NO se propaga (acotado). Monotono-seguro: solo anade ruta mas barata, nunca
+            # escala. Frontera 108/7/0 intacta (los 7 escalate abortan); 102/4/2 se mantiene (re-corrido).
+            if not _sp_aborted:
+                r["costs_log2"]["spread(local)"] = round(_sp, 2)
         except Exception:
             pass
     r["gt_ok"] = False; r["ground_truth"] = None
