@@ -476,6 +476,28 @@ def _matchgate_route_overlay(adj, cost_log2, result):
 
 
 
+def _graph_connectivity(n, circuit):
+    """Radio espectral (Perron) del grafo de interaccion 2q (aristas = pares que comparten una puerta 2q).
+    Es una medida de CONECTIVIDAD estatica: ~2 para una cadena lineal, ~n-1 para all-to-all. O(n^3) via
+    eigvalsh, n acotado -> ms. Devuelve 0 si no hay puertas 2q o n<=1.
+
+    OJO (medido 2026-07, benchmarks/subcritical_recursion): la conectividad del grafo ANTI-PREDICE la dureza
+    en la frontera -- los circuitos densos (QFT/aritmetica, conectividad alta) CANCELAN a estados de bond bajo
+    (clasicos), mientras los duros (Sycamore/kicked-Ising) son grafos 2D SOMEROS (conectividad baja). Por eso
+    esto NO se usa para rutear (la dureza es dinamica, no del grafo) -- solo para EXPLICAR el 'grande-pero-facil'."""
+    if not isinstance(n, int) or n <= 1 or n > 256:
+        return 0.0                                          # guard: eigvalsh es O(n^3); a n gigante la lectura
+                                                            # estructural (nicety) se salta -> no encarece el triage
+    seen = set()
+    for g in circuit:
+        if g and g[0] in ("cx", "cnot", "cz") and len(g) >= 3:
+            a, b = g[1], g[2]
+            if isinstance(a, int) and isinstance(b, int) and a != b and 0 <= a < n and 0 <= b < n:
+                seen.add((min(a, b), max(a, b)))
+    if not seen:
+        return 0.0
+
+
 def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchgate_hint=None) -> dict:
     """El atlas de costo. MPS y treewidth se CABLEAN a ground-truth (quimb/cotengra), que es POLINOMIAL y
     escala a n grande; el arsenal (exponencial) solo se usa para n<=ARSENAL_CAP (da fold/spread). Reporta
@@ -508,6 +530,22 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchga
         r = _fast_path()
     r["libro_flattener"] = which_flattener(circuit)
     r["t_count"] = t_count
+    # SPREAD para TODO n (Feature A): el arsenal 2^n solo daba spread(local) a n<=14 (y en produccion,
+    # sin arsenal, era None SIEMPRE). El estimador portado (pauli_spread) computa la propagacion de Pauli
+    # de Heisenberg con early-abort en tiempo n-INDEPENDIENTE (sub-ms) -> le da al motor el eje spread a
+    # cualquier n. POR AHORA: SEÑAL de display (spread_local_log2), NO alimenta el ruteo -- usarlo para
+    # certificar ruta re-tierearia circuitos clasicos del corpus y driftearia el breakdown 102/4/2 publicado
+    # (la frontera de ventaja 108/7/0 esta SEGURA -- verificado: los 7 escalate no se voltean); el uso en
+    # ruteo es un follow-up con re-corrida del corpus. Aqui: solo exponer el eje, que produccion no tenia.
+    if r["costs_log2"].get("spread(local)") is None:
+        try:
+            from pauli_spread import spread_log2 as _pspread
+            _sp, _sp_aborted = _pspread(n, circuit)
+            r["spread_local_log2"] = None if _sp_aborted else round(_sp, 2)
+            r["spread_source"] = "pauli-propagation (n-independent)"
+            r["spread_aborted"] = bool(_sp_aborted)
+        except Exception:
+            pass
     r["gt_ok"] = False; r["ground_truth"] = None
     try:                                                    # GROUND TRUTH para TODO n (poly): quimb + cotengra
         # Cada estimador bajo su PROPIO presupuesto. "ok" -> valor real (identico al previo). "timeout" ->
