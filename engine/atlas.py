@@ -476,7 +476,7 @@ def _matchgate_route_overlay(adj, cost_log2, result):
 
 
 
-def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict:
+def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchgate_hint=None) -> dict:
     """El atlas de costo. MPS y treewidth se CABLEAN a ground-truth (quimb/cotengra), que es POLINOMIAL y
     escala a n grande; el arsenal (exponencial) solo se usa para n<=ARSENAL_CAP (da fold/spread). Reporta
     recursos cuantificados (RAM/tiempo), no solo un veredicto-semaforo."""
@@ -536,7 +536,8 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
         #     ships dark hasta validacion adicional). Clifford tiene precedencia (ruta ya embarcada).
         # TODO(atlas_certificate.py, OTRO agente): etiquetar evidence_basis='theorem' para la ruta matchgate
         # (follow-up de una linea; ese archivo NO se toca desde aqui).
-        _mg = bool(_ff is not None and not _cliff_skip and _ff.is_matchgate(circuit, n))
+        _mg = bool(_ff is not None and not _cliff_skip and
+                   (matchgate_hint if matchgate_hint is not None else _ff.is_matchgate(circuit, n)))
         _mg_skip = _mg and _ff.matchgate_enabled()
         if _cliff_skip:
             mps_st = tw_st = "clifford_skip"; mps_val = tw_val = None
@@ -571,6 +572,23 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0) -> dict
             # validado ademas en corpus real: 8/8 Clifford leen 0.0000 exacto.
             r["anti_flatness"] = 0.0
             r["anti_flatness_basis"] = "theorem-clifford"
+        if _mg:
+            # deteccion SIEMPRE emitida (flag + warning aditivos); la ruta-teorema queda documentada aunque
+            # el salto este apagado. Con ATLAS_MATCHGATE=1 ademas se anade el coste poly explicito, que gana
+            # el min de metodos -> veredicto TRACTABLE via free-fermion (el analogo del Gottesman-Knill path).
+            r["matchgate"] = True
+            r.setdefault("cross_warnings", []).append(
+                "Matchgate/free-fermion (TEOREMA): todas las puertas son matchgates vecino-proximo en la linea "
+                "(XX/YY/Z-type) -> simulacion clasica POLY O(#gates*n^3) via covarianza de Majorana "
+                "(Valiant 2001; Terhal-DiVincenzo 2002; identidad Pfaffiana sum_S Pf(A_S)^2 = "
+                "sqrt(det(I+A^T A)) para la suma de amplitudes). Ruta SOLO fermionica/Pfaffiana: los analogos "
+                "hafnianos (bosonicos) estan REFUTADOS como base (Heilmann-Lieb y strong-Rayleigh caen para "
+                "hafnianos al cuadrado) -- no extrapolar")
+            if _mg_skip:
+                r["costs_log2"]["freefermion(matchgate)"] = round(_ff.matchgate_cost_log2(n, len(circuit)), 2)
+                r.setdefault("cross_warnings", []).append(
+                    "ATLAS_MATCHGATE=1: quimb/cotengra SALTADOS a proposito (como el early-exit Clifford) -- "
+                    "la ruta free-fermion poly gobierna; bond/treewidth no computados (no aportan a la ruta)")
         r["gt_ok"] = True; r["mps_truncated"] = trunc; r["treewidth_exact"] = tw_exact
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)

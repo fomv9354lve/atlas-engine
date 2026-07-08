@@ -326,3 +326,93 @@ def matchgate_cost_log2(n: int, n_gates: int) -> float:
     (a naive full 2n x 2n congruence per gate; the local-block update is cheaper).
     Never understates: real RAM is only O(n^2)."""
     return float(np.log2(max(2, int(n_gates)) * max(2, int(n)) ** 3))
+
+
+# ---------------------------------------------------------------------------
+# RAW-QASM matchgate detection (pieza #1: hacer que el detector VEA el camino en vivo).
+# El parser de Atlas descompone rxx/iswap/... a {cx,h,rz} ANTES de que el motor los vea,
+# asi que is_matchgate_circuit sobre las TUPLAS descompuestas nunca dispara para QASM.
+# Este escaner lee los nombres de gate CRUDOS del QASM (antes de descomponer) y aplica el
+# MISMO criterio matchgate. Conservador por construccion: cualquier linea que no parsee
+# limpio, cualquier gate fuera del set, cualquier measure/barrier/reset/if -> False.
+# ---------------------------------------------------------------------------
+import re as _re
+
+# nombres de gate crudos que un circuito matchgate puede usar (mapea al set de is_matchgate_circuit)
+_MG_1Q_RAW = set(_ZROT_FIXED) | set(_ZROT_ANGLE)            # z/s/t/.../rz/p/u1/phase
+_MG_2Q_RAW = set(_TWO_Q_ANGLE) | set(_TWO_Q_FIXED) | {"fsim"}
+_QASM_GATE_RE = _re.compile(r"^\s*([a-zA-Z][a-zA-Z0-9_]*)\s*(?:\(([^)]*)\))?\s+(.+?)\s*;\s*$")
+_QASM_QUBIT_RE = _re.compile(r"[A-Za-z_][A-Za-z0-9_]*\s*\[\s*(\d+)\s*\]")
+_QASM_SKIP = ("openqasm", "include", "qreg", "creg", "gate ", "//", "opaque")
+
+
+def matchgate_from_qasm(text):
+    """Escanea el QASM CRUDO (pre-descomposicion) y devuelve True SOLO si todo gate real es
+    un matchgate vecino-proximo (mismo criterio que is_matchgate_circuit) sobre los nombres
+    ORIGINALES. Conservador: al menor gate no-matchgate / measure/barrier/if / linea rara -> False.
+    Reutiliza is_matchgate_circuit reconstruyendo las tuplas nativas desde el QASM."""
+    if not text or not isinstance(text, str):
+        return False
+    n = 0
+    raw = []
+    saw_gate = False
+    for line in text.split("\n"):
+        s = line.strip()
+        if not s or s.startswith("//"):
+            continue
+        low = s.lower()
+        # registro de qubits -> n
+        m_reg = _re.match(r"^\s*qreg\s+[A-Za-z_][A-Za-z0-9_]*\s*\[\s*(\d+)\s*\]", s)
+        if m_reg:
+            n = max(n, int(m_reg.group(1)))
+            continue
+        if any(low.startswith(k) for k in _QASM_SKIP):
+            continue
+        # cualquier medicion/barrier/reset/condicional en un circuito -> NO afirmamos matchgate
+        if low.startswith(("measure", "barrier", "reset", "if", "for", "while")):
+            return False
+        mg = _QASM_GATE_RE.match(s)
+        if not mg:
+            return False                                   # linea de gate que no parsea limpio -> conservador
+        name = mg.group(1).lower()
+        ang_s = mg.group(2)
+        qs = [int(q) for q in _QASM_QUBIT_RE.findall(mg.group(3))]
+        if name in _MG_1Q_RAW:
+            if len(qs) != 1:
+                return False
+            if name in _ZROT_ANGLE:
+                from atlas import _evang                    # reusa el eval de angulo seguro del parser
+                th = _evang(ang_s)
+                if th is None:
+                    return False
+                raw.append((name, qs[0], th))
+            else:
+                raw.append((name, qs[0]))
+            saw_gate = True
+        elif name in _MG_2Q_RAW:
+            if len(qs) != 2:
+                return False
+            if name in _TWO_Q_ANGLE:
+                from atlas import _evang
+                th = _evang(ang_s)
+                if th is None:
+                    return False
+                raw.append((name, qs[0], qs[1], th))
+            elif name == "fsim":
+                # QASM fsim(theta,phi) q[a],q[b]; -> tupla (fsim, a, b, theta, phi)
+                parts = [p.strip() for p in (ang_s or "").split(",")]
+                if len(parts) != 2:
+                    return False
+                from atlas import _evang
+                th, phi = _evang(parts[0]), _evang(parts[1])
+                if th is None or phi is None:
+                    return False
+                raw.append(("fsim", qs[0], qs[1], th, phi))
+            else:                                          # _TWO_Q_FIXED (sin angulo)
+                raw.append((name, qs[0], qs[1]))
+            saw_gate = True
+        else:
+            return False                                   # gate fuera del set matchgate -> False
+    if not saw_gate or n <= 0:
+        return False
+    return is_matchgate_circuit(n, raw)
