@@ -547,8 +547,9 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchga
             # RUTEO por spread ACTIVADO: alimenta el adjudicador para TODO n. Solo certifica cuando el
             # observable local NO se propaga (acotado). Monotono-seguro: solo anade ruta mas barata, nunca
             # escala. Frontera 108/7/0 intacta (los 7 escalate abortan); 102/4/2 se mantiene (re-corrido).
-            if not _sp_aborted:
-                r["costs_log2"]["spread(local)"] = round(_sp, 2)
+            # SEÑAL-ONLY (revertido 2026-07-08): el ruteo por spread se retiró tras un false-cheap (circuito
+            # adversarial n=40, treewidth 2^54, observable Z barato -> spread cuenta TÉRMINOS de Pauli, no
+            # SOPORTE; Z propaga por Clifford como 1 término). Spread es observable-scoped, no ruta de circuito.
         except Exception:
             pass
     r["gt_ok"] = False; r["ground_truth"] = None
