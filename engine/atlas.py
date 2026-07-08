@@ -275,6 +275,27 @@ def _robust_parse(text: str):
     return n, circuit, warnings
 
 
+_TWO_Q_NAMES = frozenset({"cx", "cnot", "cy", "cz", "swap", "iswap", "rxx", "ryy", "rzz",
+                          "fsim", "givens", "dcx", "ecr", "xx", "yy", "zz"})
+
+
+def _sanitize_circuit(circ, n, warns):
+    """Drop MALFORMED 2-qubit gates (control==target, or out-of-range) that a decomposition path
+    (e.g. rzz q[i],q[i] -> cx q[i],q[i]) can produce. A self-CX is a physically meaningless no-op and
+    downstream makes the adjudicator skip without a route -> filtered here once."""
+    out, dropped = [], 0
+    for g in circ:
+        if g and g[0] in _TWO_Q_NAMES and len(g) >= 3:
+            a, b = g[1], g[2]
+            if isinstance(a, int) and isinstance(b, int) and (a == b or a < 0 or b < 0 or a >= n or b >= n):
+                dropped += 1
+                continue
+        out.append(g)
+    if dropped:
+        warns.append(f"{dropped} malformed 2-qubit gate(s) (control==target or out-of-range) DROPPED")
+    return out
+
+
 def safe_parse(text: str):
     """Punto de entrada con errores AMABLES. Devuelve (n, circuit, warnings).
 
@@ -284,6 +305,7 @@ def safe_parse(text: str):
         raise ValueError("QASM vacio")
     try:
         n, circ, warns = _robust_parse(text)
+        circ = _sanitize_circuit(circ, n, warns)
     except ValueError:
         raise
     except Exception as e:
@@ -292,6 +314,7 @@ def safe_parse(text: str):
         try:
             from importers import normalize_qasm
             n2, circ2, warns2 = _robust_parse(normalize_qasm(text))
+            circ2 = _sanitize_circuit(circ2, n2, warns2)
             if not any("no reconocido" in w for w in warns2):     # solo si la normalizacion los resolvio
                 warns2 = [w for w in warns if "no reconocido" not in w] + warns2
                 warns2.append("QASM normalizado via Qiskit (gates fuera de la base de atlas re-escritos; "
