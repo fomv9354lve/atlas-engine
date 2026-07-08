@@ -144,6 +144,7 @@ def _confidence(route: str, governing: dict, valid_routes: list[dict], invalidat
     est = governing.get("estimator")
     exact_basis = (est == "Stim stabilizer"
                    or est == "statevector"
+                   or est == "free-fermion (matchgate)"
                    or (est == "MPS" and not bool(result.get("mps_truncated")))
                    or (est == "treewidth" and bool(result.get("treewidth_exact"))))
     support += min(0.10, 0.05 * (corroboration - 1))                     # independent estimators agreeing
@@ -190,6 +191,13 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
     if bool(result.get("stim_clifford")):
         valid_routes.append({"route": "CPU", "estimator": "Stim stabilizer", "cost_log2": 0.0,
                              "reason": "Clifford circuit: Stim simulates in polynomial time for any n"})
+
+    if bool(result.get("matchgate_route_active")):
+        _mg_cost = (result.get("costs_log2") or {}).get("freefermion(matchgate)")
+        valid_routes.append({"route": "CPU", "estimator": "free-fermion (matchgate)",
+                             "cost_log2": round(float(_mg_cost), 2) if _mg_cost is not None else 0.0,
+                             "reason": "matchgate circuit: Majorana-covariance free-fermion simulation "
+                                       "is polynomial for any n (Valiant 2001; Terhal-DiVincenzo 2002)"})
 
     spread = c["spread"]
     if spread is not None and spread <= CPU_SPREAD_MAX:

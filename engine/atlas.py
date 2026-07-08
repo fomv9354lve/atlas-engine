@@ -577,6 +577,7 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchga
             # el salto este apagado. Con ATLAS_MATCHGATE=1 ademas se anade el coste poly explicito, que gana
             # el min de metodos -> veredicto TRACTABLE via free-fermion (el analogo del Gottesman-Knill path).
             r["matchgate"] = True
+            r["matchgate_route_active"] = bool(_mg_skip)
             r.setdefault("cross_warnings", []).append(
                 "Matchgate/free-fermion (TEOREMA): todas las puertas son matchgates vecino-proximo en la linea "
                 "(XX/YY/Z-type) -> simulacion clasica POLY O(#gates*n^3) via covarianza de Majorana "
