@@ -318,7 +318,7 @@ def certificate(qasm: str) -> dict:
     except Exception as e:
         hardware = {"applies": False, "error": str(e)[:160]}
 
-    return {"route": ra.get("route"), "witness": witness,
+    cert = {"route": ra.get("route"), "witness": witness,
             "confidence": confidence, "driver": driver,
             "false_safety_risk": fsr,
             "impossibility": _impossibility(r, costs, n),
@@ -327,6 +327,47 @@ def certificate(qasm: str) -> dict:
             "provenance": provenance,
             "hardware": hardware,
             "resources": r.get("resources")}
+    cert["epistemic_quadrants"] = _epistemic_quadrants(cert, r)
+    return cert
+
+
+def _epistemic_quadrants(cert, r):
+    """Los 4 cuadrantes de Rumsfeld para ESTE veredicto de dureza, ensamblados desde los campos que el
+    certificado ya produce. known-known = ruta establecida (teorema/exact o folds convergentes);
+    known-unknown = residuales NOMBRADOS (disenso, proxima evidencia, margen de frontera); unknown-known =
+    senales latentes que tenemos pero no ruteamos (spread/anti_flatness/abstenidos, independencia efectiva);
+    unknown-unknown = paradigmas no-rastreados NO descartados (nunca prueba de imposibilidad absoluta)."""
+    ag = cert.get("agreement") or {}
+    lvl = ag.get("level")
+    imp = cert.get("impossibility") or {}
+    established = lvl in ("STRONG", "FIRM") or (imp.get("beyond_tracked_paradigms") is False and lvl != "NULL")
+    return {
+        "note": "estatus epistemico del veredicto (cuadrantes de Rumsfeld) -- el mapa honesto, no solo la respuesta",
+        "known_known": {  # establecido
+            "verdict": cert.get("route"),
+            "witness": (cert.get("witness") or {}).get("statement") if isinstance(cert.get("witness"), dict) else cert.get("witness"),
+            "agreement_level": lvl,
+            "established": bool(established),
+        },
+        "known_unknown": {  # residuales nombrados
+            "next_required_evidence": cert.get("next_required_evidence") or [],
+            "boundary_margin": cert.get("boundary_margin"),
+            "dissenters": ag.get("dissenters", []),
+            "on_the_frontier": lvl == "SPLIT",
+        },
+        "unknown_known": {  # activos latentes (los tenemos, no los usamos para rutear)
+            "latent_signals_abstained": cert.get("abstain_from") or [],
+            "effective_independence": ag.get("effective_independence") or (cert.get("provenance") or {}).get("effective_independence"),
+            "reads": "senales presentes que NO certifican la ruta (spread/anti_flatness/estimadores salteados)",
+        },
+        "unknown_unknown": {  # sorpresas honestas / no-modelado
+            "untracked_paradigms_not_ruled_out": imp.get("untracked_paradigms_not_ruled_out", []),
+            "not_an_impossibility_proof": True,
+            "review_pending": bool(r.get("matchgate_review_pending")),
+            "reads": ("aunque todo metodo rastreado diga 'duro', los no-rastreados (Pauli-path, ZX, low-rank, "
+                      "algoritmos futuros) NO estan descartados -- jamas una prueba de dureza absoluta"),
+        },
+    }
 
 
 if __name__ == "__main__":
