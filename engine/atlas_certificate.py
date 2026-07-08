@@ -116,8 +116,11 @@ def _impossibility(r, costs, n, budget_log2=30.0):
               and v["lower_bound_log2"] > budget_log2]
     # tracked paradigms only; even if ALL of these exceed budget, UNTRACKED classical
     # methods are not ruled out -> this is NEVER an impossibility proof.
-    untracked = ["Pauli-propagation", "ZX-calculus", "low-rank / stabilizer-decomposition",
-                 "hyper-optimized contraction", "future algorithms"]
+    untracked = ["sparse Pauli dynamics / Pauli-path (local observables; Begušic-Chan 2023-24, "
+                 "Angrisani 2024 -- refuted the IBM Eagle kicked-Ising 'utility' claim on a laptop)",
+                 "tensor-network belief-propagation / observable contraction (Tindall et al. 2024)",
+                 "ZX-calculus simplification", "low-rank / stabilizer-decomposition",
+                 "hyper-optimized / hyper-indexed contraction", "future algorithms"]
     coverable = ("statevector", "tensor_contraction", "mps")
     beyond_tracked = all(
         classes.get(c, {}).get("certified")
@@ -128,6 +131,23 @@ def _impossibility(r, costs, n, budget_log2=30.0):
         "provably_beyond_budget_classes": beyond,
         "beyond_tracked_paradigms": beyond_tracked,
         "untracked_paradigms_not_ruled_out": untracked,
+        # TASK SCOPE (the unknown-unknown made explicit): Atlas's estimators (MPS/treewidth/statevector)
+        # measure the cost of FULL state-vector simulation / strong sampling. LOCAL OBSERVABLE expectation
+        # values (<Z_i>, energies, few-body correlators) are a DIFFERENT and often much EASIER task --
+        # approximate methods (sparse Pauli dynamics, TN belief propagation) simulate those classically
+        # even when this circuit is hard to sample. The IBM Eagle kicked-Ising 'utility' circuits are the
+        # canonical case: hard to sample, but their local observables were reproduced on a laptop. So a
+        # 'hard/ESCALATE' verdict here is a SAMPLING/full-state statement, NOT a claim that every quantity
+        # of interest needs a QPU.
+        "task_scope": {
+            "verdict_applies_to": "full state-vector simulation / strong sampling",
+            "not_covered": "local-observable expectation values (<Z_i>, energies, few-body correlators)",
+            "reads": ("this hardness verdict is for SAMPLING / full state; if you only need local "
+                      "observables, approximate methods (sparse Pauli dynamics -- Begušic-Chan; TN belief "
+                      "propagation -- Tindall et al.) may be classically tractable even when this says "
+                      "hard. The IBM Eagle kicked-Ising circuits are hard to sample yet had their "
+                      "observables reproduced classically on a laptop."),
+        },
         "beyond_tracked_paradigms_reads": (
             ("beyond budget for every TRACKED paradigm via certified lower bounds, BUT "
              "untracked methods (Pauli-propagation, ZX, low-rank, ...) are NOT ruled out "
