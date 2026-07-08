@@ -199,6 +199,18 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
                              "reason": "matchgate circuit: Majorana-covariance free-fermion simulation "
                                        "is polynomial for any n (Valiant 2001; Terhal-DiVincenzo 2002)"})
 
+    _magic = c["magic"]
+    if _magic is not None and _magic > 0.0 and nn > 0:
+        _sr_cost = _magic + (nn.bit_length())
+        _sr_route = ("CPU" if _sr_cost <= CPU_MPS_MAX else "TENSOR" if _sr_cost <= TENSOR_MPS_MAX
+                     else "HPC_FIRST" if _sr_cost <= budget_log2 else None)
+        if _sr_route is not None:
+            valid_routes.append({"route": _sr_route, "estimator": "stabilizer-rank",
+                                 "cost_log2": round(_sr_cost, 2),
+                                 "reason": f"low T-count ({round(_magic/0.3962)} T): stabilizer-rank "
+                                           f"decomposition simulates in 2^(0.396*T)*poly(n) "
+                                           f"(Bravyi-Gosset); amplitude/sampling, not full statevector"})
+
     spread = c["spread"]
     if spread is not None and spread <= CPU_SPREAD_MAX:
         valid_routes.append({"route": "CPU", "estimator": "Pauli spread", "cost_log2": round(spread, 2),
