@@ -249,6 +249,26 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
         valid_routes.append({"route": "ESCALATE", "estimator": "treewidth", "cost_log2": round(c["treewidth"], 2),
                              "reason": "contraction width exceeds declared classical budget"})
 
+    # INVARIANTE DE SOUNDNESS (error de un solo lado): una ruta puede certificar BARATO (CPU/TENSOR) SOLO si
+    # su estimador es EXACTO (Stim/matchgate/statevector/MPS no-truncado) o una COTA SUPERIOR demostrable de
+    # costo (treewidth greedy, stabilizer-rank Bravyi-Gosset). Una heuristica (p.ej. Pauli spread) NO es cota
+    # superior del circuito y NO puede producir un veredicto barato -- el false-cheap del spread (jul-2026) es
+    # el caso de escuela. Esto hace que "Atlas nunca false-cheap dentro de sus paradigmas rastreados" sea una
+    # garantia ESTRUCTURAL, no una propiedad emergente. Hoy es no-op (spread ya no alimenta costs); es el guard
+    # duro que impide REINTRODUCIR el bug via cualquier heuristica futura.
+    _SOUND_CHEAP = frozenset({"statevector", "Stim stabilizer", "free-fermion (matchgate)", "MPS",
+                              "stabilizer-rank", "treewidth"})
+    soundness_rejected: list[dict] = []
+    _kept = []
+    for _vr in valid_routes:
+        if _vr["route"] in ("CPU", "TENSOR") and _vr["estimator"] not in _SOUND_CHEAP:
+            soundness_rejected.append({**_vr, "soundness_violation":
+                                       "heuristic estimator cannot certify a cheap route "
+                                       "(neither exact nor a proven upper bound on cost)"})
+        else:
+            _kept.append(_vr)
+    valid_routes = _kept
+
     if not valid_routes:
         # TODOS los estimadores abstuvieron y no hay certificado de statevector factible (n grande): deferral
         # operacional HONESTO (no es una afirmacion de dureza), en vez de un cuelgue crudo. Es el "partial
@@ -278,12 +298,31 @@ def adjudicate_route(result: dict, budget_log2: float = HPC_TW_MAX, n: int | Non
                                 "why_atlas_differs": "T-count alone ignores entanglement and contraction structure"})
 
     conf = _confidence(route, governing, valid_routes, invalidated, result)
+    # GARANTIA DE SOUNDNESS explicita en el certificado: clase del respaldo de la ruta elegida y el enunciado
+    # de error-de-un-solo-lado con su ALCANCE honesto (solo paradigmas rastreados; los no-rastreados NO se
+    # descartan -- eso vive en el cuadrante unknown-unknown / impossibility). El activo latente, ahora declarado.
+    _gov_basis = ("exact" if governing["estimator"] in ("statevector", "Stim stabilizer",
+                                                        "free-fermion (matchgate)", "MPS")
+                  else "upper_bound" if governing["estimator"] in ("treewidth", "stabilizer-rank")
+                  else None)
+    soundness = {
+        "one_sided_error": True,
+        "cheap_certified_by": (_gov_basis if route in ("CPU", "TENSOR") else None),
+        "guarantee": ("a CPU/TENSOR (classically-tractable) verdict is backed only by an exact simulation "
+                      "(Stim/matchgate/statevector/non-truncated MPS) or a proven upper bound on cost "
+                      "(treewidth, stabilizer-rank); Atlas is structurally unable to under-certify hardness "
+                      "(false-cheap) within its tracked paradigms"),
+        "scope": ("tracked classical paradigms only; untracked methods (Pauli-propagation, ZX, low-rank, ...) "
+                  "are NOT ruled out -- see impossibility.untracked_paradigms_not_ruled_out"),
+        "rejected_unsound_cheap": soundness_rejected,
+    }
     return {
         "route": route,
         "route_order": ORDER[route],
         "governing_estimator": governing["estimator"],
         "governing_cost_log2": governing["cost_log2"],
         "governing_reason": governing["reason"],
+        "soundness": soundness,
         "valid_routes": valid_routes,
         "invalidated_estimators": invalidated,
         "single_estimator_baselines": baselines,
