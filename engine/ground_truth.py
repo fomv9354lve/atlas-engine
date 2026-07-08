@@ -169,6 +169,19 @@ def cross_validate(n, circuit, t_count, mps_log2, tw_log2, mps_truncated, spread
             "stim_clifford": bool(stim_cliff)}
 
 
+class UnsupportedGate(Exception):
+    """El build MPS/treewidth no sabe aplicar este gate -> el estimador ABSTIENE (honesto),
+    NUNCA lo ignora en silencio. El silent-ignore producia un bond-1/treewidth-0 FALSO en
+    circuitos matchgate nativos (rxx/iswap/...), ruteandolos CPU con confianza alta (bug 2026-07)."""
+
+
+# Compuertas de 2 qubits parametricas que quimb aplica nativamente. La MAYORIA de los circuitos
+# llegan ya descompuestos por el parser (rxx QASM -> cx,rz,cx), pero las TUPLAS NATIVAS matchgate
+# (rxx/ryy/rzz/iswap/givens/fsim/swap) llegan crudas -> deben aplicarse REALMENTE, no ignorarse.
+_2Q_PARAM = {"rxx": "RXX", "ryy": "RYY", "rzz": "RZZ", "givens": "GIVENS", "xy": "GIVENS"}
+_2Q_PLAIN = {"iswap": "ISWAP", "swap": "SWAP"}
+
+
 def _build(circ, circuit):
     for g in circuit:
         op = g[0]
@@ -180,8 +193,24 @@ def _build(circ, circuit):
             circ.apply_gate("CZ", g[1], g[2])
         elif op == "rz":
             circ.apply_gate("RZ", g[2], g[1])
-        # hop/desconocidos: se ignoran (no deberian llegar; el generador descompone hop)
+        elif op in _2Q_PARAM:                              # rxx/ryy/rzz/givens/xy: angulo = ultimo elemento
+            circ.apply_gate(_2Q_PARAM[op], g[3], g[1], g[2])
+        elif op in _2Q_PLAIN:                              # iswap/swap: sin angulo
+            circ.apply_gate(_2Q_PLAIN[op], g[1], g[2])
+        elif op == "fsim":                                 # fsim(theta, phi, q1, q2)
+            circ.apply_gate("FSIM", g[3], g[4], g[1], g[2])
+        else:
+            # FAIL-LOUD: gate desconocido -> abstencion honesta (el caller marca truncado/inexacto),
+            # NUNCA el bond-1/treewidth-0 silencioso que mentia en circuitos matchgate.
+            raise UnsupportedGate(op)
     return circ
+
+
+def _has_entangler(circuit):
+    """True si el circuito tiene ALGUNA 2q entrelazante (no solo cx/cz -- tambien las matchgate
+    nativas). El atajo de estado-producto de treewidth mentia sin esto (rxx/iswap -> tw 0 falso)."""
+    ent = {"cx", "cnot", "cz", "iswap", "swap", "rxx", "ryy", "rzz", "givens", "xy", "fsim"}
+    return any(g and g[0] in ent for g in circuit)
 
 
 def mps_bond_log2(n, circuit, max_bond=None):
@@ -197,7 +226,10 @@ def mps_bond_log2(n, circuit, max_bond=None):
         # excede el presupuesto el veredicto es INTRACTABLE. Solo necesitamos SABER que trunca, no el bond real.
         max_bond = min(theo_max, 1024 if n <= 20 else 64)
     circ = qtn.CircuitMPS(n, gate_opts={"max_bond": max_bond, "cutoff": 1e-10})
-    _build(circ, circuit)
+    try:
+        _build(circ, circuit)
+    except UnsupportedGate:
+        return float(n) / 2.0, True
     b = int(circ.psi.max_bond())
     # truncado SOLO si tocamos un cap ARTIFICIAL (< maximo teorico). Tocar el maximo teorico = EXACTO.
     truncated = (b >= max_bond) and (max_bond < theo_max)
@@ -211,7 +243,10 @@ def treewidth_log2(n, circuit, optimize=None):
     computable para redes pequenas (programacion dinamica). Usamos 'optimal'/'dp' (EXACTO) por debajo de un
     umbral de tensores, y 'greedy' (cota superior heuristica) por encima. Devuelve (log2, exacto?)."""
     circ = qtn.Circuit(n)
-    _build(circ, circuit)
+    try:
+        _build(circ, circuit)
+    except UnsupportedGate:
+        return float(n), False
     psi = circ.psi
     n_tensors = psi.num_tensors
     if optimize is not None:
