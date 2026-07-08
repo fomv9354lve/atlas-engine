@@ -590,6 +590,12 @@ def cost_atlas(n: int, circuit: list, observable=None, budget_log2=40.0, matchga
                 r.setdefault("cross_warnings", []).append(
                     "ATLAS_MATCHGATE=1: quimb/cotengra SALTADOS a proposito (como el early-exit Clifford) -- "
                     "la ruta free-fermion poly gobierna; bond/treewidth no computados (no aportan a la ruta)")
+                r["matchgate_review_pending"] = True
+                r.setdefault("cross_warnings", []).append(
+                    "AVISO DE HONESTIDAD: la ruta matchgate/free-fermion esta ACTIVA pero PENDIENTE de revision "
+                    "EXTERNA independiente (Jordan-Wigner / covarianza de Majorana). Validacion interna: deteccion "
+                    "12/12 + 16/16, simulacion 32/32 exacta vs statevector; la ruta es un TEOREMA (Valiant 2001). "
+                    "Aun asi, sin ojos externos aun -- tratar como fuerte-pero-no-auditada-por-terceros.")
         r["gt_ok"] = True; r["mps_truncated"] = trunc; r["treewidth_exact"] = tw_exact
         gt = cross_validate(n, circuit, t_count, b, tw, trunc,
                             spread_log2=r["costs_log2"].get("spread(local)"), tw_exact=tw_exact)
